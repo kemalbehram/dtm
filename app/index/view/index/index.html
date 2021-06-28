@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{:sysconfig('site', 'site_name')}</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script>
+        (function (doc, win) {
+            var htmlEle = doc.documentElement;
+            var reload = "orientationchange" in window ? "orientationchange" : "resize";
+            function setFontsize() {
+                var clientWidth = htmlEle.clientWidth;
+                if (!clientWidth) return;
+                htmlEle.style.fontSize = 75 * (clientWidth / 750) + "px";
+            }
+            win.addEventListener(reload, setFontsize, false);
+            doc.addEventListener("DOMContentLoaded", setFontsize, false);
+        })(document, window);
+    </script>
+    <style>.layui-layer-content{color: #000!important;}</style>
+</head>
+<body>
+<div class="header clearfix">
+    <div class="languages">
+        <div class="toggle"><img src="images/icon1.png" alt=""><span>中文</span></div>
+        <div class="popup">
+            <i></i>
+            <ul>
+                <li><a href="/?lang=zh">中文</a></li>
+                <li><a href="/?lang=en">English</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="header-title">理财</div>
+</div>
+
+<div class="container">
+    <ul class="my-total clearfix user_info" style="margin: 2rem 0 1rem;">
+        <li>
+            <div class="label">可用账户</div>
+            <div class="value amount1">--</div>
+        </li>
+        <li>
+            <div class="label">不可用账户</div>
+            <div class="value amount2">--</div>
+        </li>
+        <li>
+            <div class="label">奖金账户</div>
+            <div class="value amount3">--</div>
+        </li>
+        <li>
+            <div class="label">额度</div>
+            <div class="value quota">--</div>
+        </li>
+    </ul>
+
+    <ul class="home-list">
+        <li>
+            <div class="title"><span class="js-model" data-id="ljtz">立即投入</span>AUK投资返利</div>
+            <div class="info">
+                <div class="item">
+                    <span class="red">{:sysconfig('other', 'release_ratio')}%</span>
+                    <strong>每日返还</strong>
+                </div>
+                <div class="item">
+                    <span>100USDT</span>
+                    <strong>最小起投金额</strong>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="page-title"><span>收益统计</span></div>
+    <ul class="my-user award" style="margin-bottom: .53333rem;">
+        <li>
+            <div class="label">静态奖累计收益</div>
+            <div class="value static_award">--</div>
+        </li>
+        <li>
+            <div class="label">直推奖累计收益</div>
+            <div class="value direct_award">--</div>
+        </li>
+        <li>
+            <div class="label">管理奖累计收益</div>
+            <div class="value manage_award">--</div>
+        </li>
+        <li>
+            <div class="label">累计收益</div>
+            <div class="value all_award">--</div>
+        </li>
+    </ul>
+</div>
+
+<div class="model-container" id="ljtz">
+    <div class="overlay"></div>
+    <div class="wrap">
+        <div class="title"><a href="javascript:;" class="close">取消</a>投资数量</div>
+        <div style="height: 50px">
+            <label><span>选择付款账户</span></label>
+            <select name="tpe" id="type" style="height: 30px;">
+                <option value="1">可用账户</option>
+                <option value="2">不可用账户</option>
+                <option value="3">奖金账户</option>
+            </select>
+        </div>
+        <div class="input">
+            <label><input type="text" placeholder="请输入要投入的USDT数量" id="amount"></label>
+            <span>USDT</span>
+        </div>
+        <button class="submit" onclick="start();">提交</button>
+    </div>
+</div>
+
+<div class="tabbar">
+    <div class="tabbar-placeholder"></div>
+    <ul class="clearfix">
+        <li class="active"><a href="/"><i class="i1"></i>理财</a></li>
+        <li><a href="/order"><i class="i2"></i>订单</a></li>
+        <li><a href="/user"><i class="i3"></i>我的</a></li>
+    </ul>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/php.js"></script>
+<script src="/layui/layui.all.js"></script>
+<script src="/js/app.js?v={:time()}"></script>
+<script>
+    setTimeout(function () {
+        getUserInfo();
+    }, 500);
+</script>
+
+</body>
+</html>

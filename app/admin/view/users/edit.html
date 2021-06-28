@@ -1,0 +1,61 @@
+<style>
+    .layui-word-aux{
+        height: 36px;
+        line-height: 36px;
+        color: unset!important;
+    }
+</style>
+<div class="layuimini-container">
+    <form id="app-form" class="layui-form layuimini-form">
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户ID</label>
+            <div class="layui-input-block">
+                <span class="layui-word-aux">{$row.id|default=''}</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">钱包地址</label>
+            <div class="layui-input-block">
+                <span class="layui-word-aux">{$row.address|default=''}</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">可用账户</label>
+            <div class="layui-input-block">
+                <input type="text" name="amount1" class="layui-input" placeholder="请输入可用账户" value="{$row.amount1|default=''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">不可用账户</label>
+            <div class="layui-input-block">
+                <input type="text" name="amount2" class="layui-input" placeholder="请输入不可用账户" value="{$row.amount2|default=''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖金账户</label>
+            <div class="layui-input-block">
+                <input type="text" name="amount3" class="layui-input" placeholder="请输入奖金账户" value="{$row.amount3|default=''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">额度</label>
+            <div class="layui-input-block">
+                <input type="text" name="quota" class="layui-input" placeholder="请输入额度" value="{$row.quota|default=''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">独立释放比例(%)</label>
+            <div class="layui-input-block">
+                <input type="text" name="release_ratio" class="layui-input" placeholder="请输入独立释放比例" value="{$row.release_ratio|default=''}">
+                <tip>为零时就会以 系统管理->系统设置->其他配置中的 公共值 为准</tip>
+            </div>
+        </div>
+        <div class="hr-line"></div>
+        <div class="layui-form-item text-center">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+        </div>
+
+    </form>
+</div>

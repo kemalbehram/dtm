@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+
+    <script>
+        (function (doc, win) {
+            var htmlEle = doc.documentElement;
+            var reload = "orientationchange" in window ? "orientationchange" : "resize";
+            function setFontsize() {
+                var clientWidth = htmlEle.clientWidth;
+                if (!clientWidth) return;
+                htmlEle.style.fontSize = 75 * (clientWidth / 750) + "px";
+            }
+            win.addEventListener(reload, setFontsize, false);
+            doc.addEventListener("DOMContentLoaded", setFontsize, false);
+        })(document, window);
+    </script>
+    <style>.layui-layer-content{color: #000!important;}</style>
+</head>
+<body>
+<div class="header clearfix">
+    <div class="header-title">订单</div>
+</div>
+
+<div class="container">
+    <ul class="order-list">
+
+    </ul>
+</div>
+
+<div class="tabbar">
+    <div class="tabbar-placeholder"></div>
+    <ul class="clearfix">
+        <li><a href="/"><i class="i1"></i>理财</a></li>
+        <li class="active"><a href="/order"><i class="i2"></i>订单</a></li>
+        <li><a href="/user"><i class="i3"></i>我的</a></li>
+    </ul>
+</div>
+
+<script id="list" type="text/html">
+    {{# if (d.length){ }}
+        {{# layui.each(d, function(i, v){ }}
+            <li>
+                <div class="title">
+                    <div class="label">投资金额</div>
+                    <div class="value">{{ v.amount }}USDT</div>
+                </div>
+                <div class="subtitle">
+                    <div class="label">投资时间</div>
+                    <div class="value">{{ v.create_time }}</div>
+                </div>
+            </li>
+        {{# }); }}
+    {{# } else { }}
+        <li>
+            <div class="subtitle">
+                <div style="text-align: center;">暂无数据</div>
+            </div>
+        </li>
+    {{# } }}
+</script>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/php.js"></script>
+<script src="/layui/layui.all.js"></script>
+<script src="/js/app.js?v={:time()}"></script>
+
+<script>
+    $(function () {
+        get_order();
+    });
+</script>
+
+</body>
+</html>

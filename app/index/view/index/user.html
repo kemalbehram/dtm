@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script>
+        (function (doc, win) {
+            var htmlEle = doc.documentElement;
+            var reload = "orientationchange" in window ? "orientationchange" : "resize";
+            function setFontsize() {
+                var clientWidth = htmlEle.clientWidth;
+                if (!clientWidth) return;
+                htmlEle.style.fontSize = 75 * (clientWidth / 750) + "px";
+            }
+            win.addEventListener(reload, setFontsize, false);
+            doc.addEventListener("DOMContentLoaded", setFontsize, false);
+        })(document, window);
+    </script>
+    <style>
+        .layui-layer-content{color: #000!important;}
+        html .layui-layer-demo{background-color:#eee;}
+        .tip {text-align: center;height: 40px;line-height: 40px;margin-top: 15px;}
+        #qrcode img {margin: 0 auto;padding-top: 15px;}
+        .layui-layer-demo1 .layui-layer-title {text-align: center;padding: unset!important;border:none; background-color:#654bcc; color:#fff;}
+    </style>
+</head>
+<body>
+<div class="header clearfix">
+    <div class="header-title">我的</div>
+</div>
+
+<div class="container">
+    <div class="page-title"><span>充值提现</span></div>
+    <ul class="my-user">
+        <li>
+            <div class="label" style="line-height: 40px;">可用账户：<span class="amount1">--</span></div>
+            <div class="value">
+                <button class="copy recharge" onclick="recharge();">充值</button>
+            </div>
+        </li>
+        <li>
+            <div class="label" style="line-height: 40px;">奖金账户：<span class="amount3">--</span></div>
+            <div class="value">
+<!--                <button class="copy">转账</button>-->
+                <button class="copy withdraw">提现</button>
+            </div>
+        </li>
+    </ul>
+
+    <div class="page-title"><span>邀请链接</span></div>
+    <ul class="my-user">
+        <li>
+            <div class="label">
+                <input type="text" id="invite_url" class="invite_url" readonly>
+            </div>
+            <div class="value">
+                <button class="copy btn" data-clipboard-target="#invite_url" style="margin-top: 4px;">复制</button>
+            </div>
+        </li>
+    </ul>
+
+    <div class="page-title"><span>用户信息</span></div>
+    <ul class="my-user">
+        <li>
+            <div class="label">分享人数</div>
+            <div class="value share_num">--</div>
+        </li>
+        <li>
+            <div class="label">团队人数</div>
+            <div class="value team_num">--</div>
+        </li>
+        <li>
+            <div class="label">团队业绩</div>
+            <div class="value team_order_amount">--</div>
+        </li>
+    </ul>
+
+    <div class="page-title"><span>收益明细</span></div>
+    <ul class="order-list">
+
+    </ul>
+</div>
+
+<div class="tabbar">
+    <div class="tabbar-placeholder"></div>
+    <ul class="clearfix">
+        <li><a href="/"><i class="i1"></i>理财</a></li>
+        <li><a href="/order"><i class="i2"></i>订单</a></li>
+        <li class="active"><a href="/user"><i class="i3"></i>我的</a></li>
+    </ul>
+</div>
+
+<script id="list" type="text/html">
+    {{# if (d.length){ }}
+        {{# layui.each(d, function(i, v){ }}
+            <li style="margin: 0 0 .33333rem;">
+                <div class="title">
+                    <div class="label">类型</div>
+                    <div class="value">{{ v.content }}</div>
+                </div>
+                <div class="subtitle">
+                    <div class="label">相关金额</div>
+                    <div class="value">{{ v.amount }}</div>
+                </div>
+            </li>
+        {{# }); }}
+    {{# } else { }}
+            <li>
+                <div class="subtitle">
+                    <div style="text-align: center;">暂无数据</div>
+                </div>
+            </li>
+    {{# } }}
+</script>
+
+<div id="recharge" style="display: none;padding: 0 5px;">
+    <div id="qrcode"></div>
+    <div class="tip">
+        <div style="line-height: 22px;">
+            <div style="margin-bottom: 15px;">
+                地址：<input type="text" id="address" value="{:sysconfig('other', 'recharge_address')}">
+                <button class="btn2" data-clipboard-target="#address" style="margin: 4px 0;padding: 0 8px;">复制</button>
+            </div>
+            <div>请在TRON网络充值</div>
+            <div>请充值AUK，系统将自动兑换成USDT</div>
+            <div>当前AUK/USDT兑换比例：1:{:sysconfig('other', 'auk_usdt_price')}</div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/php.js"></script>
+<script src="/layui/layui.all.js"></script>
+<script src="/js/clipboard.min.js"></script>
+<script src="/js/qrcode.js?v={:time()}"></script>
+<script src="/js/app.js?v={:time()}"></script>
+
+<script>
+    $(function () {
+        setTimeout(function () {
+            getUserInfo();
+            get_money_log();
+
+            new QRCode("qrcode", {
+                text: "{:sysconfig('other', 'recharge_address')}",
+                width: 180,
+                height: 180,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }, 500);
+    });
+
+    var clipboard = new ClipboardJS('.btn');
+    clipboard.on('success', function (e) {
+        if (empty(getAddress())) {
+            layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+            return;
+        }
+        layer.msg('复制成功', {icon:1});
+    });
+    clipboard.on('error', function (e) {
+        layer.msg('复制失败', {icon:2});
+    });
+
+    var address = new ClipboardJS('.btn2');
+    address.on('success', function (e) {
+        layer.msg('复制成功', {icon:1});
+    });
+    address.on('error', function (e) {
+        layer.msg('复制失败', {icon:2});
+    });
+
+    //充值窗口
+    function recharge() {
+        layer.open({
+            title: '充值二维码',
+            type: 1,
+            skin: 'layui-layer-demo1',
+            closeBtn: 0,
+            anim: 2,
+            shadeClose: true,
+            content: $('#recharge').html(),
+            area: ['300px', '400px'],
+        });
+    }
+</script>
+
+</body>
+</html>

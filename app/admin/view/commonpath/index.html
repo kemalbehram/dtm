@@ -1,0 +1,12 @@
+<div class="layuimini-container">
+    <div class="layuimini-main">
+    	<div id="commonpath"></div>
+    </div>
+</div>
+<script>
+	var tree = layui.tree;
+	var commonpath = tree.render({
+      elem: '#commonpath'
+      ,data: JSON.parse('{$data|raw}'),
+    });
+</script>
