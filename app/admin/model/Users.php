@@ -193,25 +193,25 @@ class Users extends TimeModel
             //计算上级累计投资金额
             $cumulative_investment = Orders::cumulative_investment($fid);
 
+            //计算直推奖励
+            $award = $amount * $zt_ratio;
+
             //上级发生了投资才有奖励
             //拿直推奖励需要扣掉上级额度
             //上级额度足够才有奖励
-            if ($cumulative_investment > 0 && ($fuser->quota >= $cumulative_investment)) {
+            if ($cumulative_investment > 0 && ($fuser->quota >= $award)) {
 
                 //直推奖励入账
-                self::income($fid, $amount * $zt_ratio);
+                self::income($fid, $award);
 
                 //扣掉上级额度
-                $fuser->quota -= $cumulative_investment;
+                $fuser->quota -= $award;
                 $fuser->save();
 
                 //插入资金日志
-                MoneyLog::addLog($fid, 0, $amount * $zt_ratio, 3, $uid);
-
-                return true;
+                MoneyLog::addLog($fid, 0, $award, 3, $uid);
             }
         }
-        return false;
     }
 
 
@@ -272,8 +272,6 @@ class Users extends TimeModel
         } catch (\Exception $e) {
             throw new Exception($e->getMessage());
         }
-
-        return true;
     }
 
     //查询管理奖等级
@@ -289,8 +287,12 @@ class Users extends TimeModel
         //查询累计投资金额
         $cumulative_investment = Orders::cumulative_investment($uid);
 
+//        halt($cumulative_investment);
+
         //查询AB线业绩
         $getAbPerformance = Commonpath::getAbPerformance($uid);
+
+//        halt($getAbPerformance);
 
         //如果业绩不存在
         if (empty($getAbPerformance))  return [];
@@ -302,20 +304,21 @@ class Users extends TimeModel
         $minPerformance = min($arr);
 
         //等级判断
-        if ($cumulative_investment >= (float)$config['v1_ljtz'] &&
-            $cumulative_investment < (float)$config['v2_ljtz'] &&
-            $minPerformance >= (float)$config['v1_yj']
-        ){
-            return ['level' => 1, 'ratio' => (float)$config['v1_sy_ratio'] / 100];
-        } else if ($cumulative_investment >= (float)$config['v2_ljtz'] &&
-            $cumulative_investment < (float)$config['v3_ljtz'] &&
-            $minPerformance >= (float)$config['v2_yj']
-        ){
-            return ['level' => 2, 'ratio' => (float)$config['v2_sy_ratio'] / 100];
-        } else if ($cumulative_investment >= (float)$config['v3_ljtz'] &&
+        if (
+            $cumulative_investment >= (float)$config['v3_ljtz'] &&
             $minPerformance >= (float)$config['v3_yj']
         ){
             return ['level' => 3, 'ratio' => (float)$config['v3_sy_ratio'] / 100];
+        } else if (
+            $cumulative_investment >= (float)$config['v2_ljtz'] &&
+            $minPerformance >= (float)$config['v2_yj']
+        ){
+            return ['level' => 2, 'ratio' => (float)$config['v2_sy_ratio'] / 100];
+        } else if (
+            $cumulative_investment >= (float)$config['v1_ljtz'] &&
+            $minPerformance >= (float)$config['v1_yj']
+        ){
+            return ['level' => 1, 'ratio' => (float)$config['v1_sy_ratio'] / 100];
         } else {
             return [];
         }

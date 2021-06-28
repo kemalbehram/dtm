@@ -166,6 +166,7 @@ class Ajax extends AdminController
 
     public function test()
     {
-
+        $data = Users::management_level(429)['level'] ?? '无';
+        halt($data);
     }
 }

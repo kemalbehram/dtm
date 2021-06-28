@@ -170,8 +170,37 @@ class Commonpath extends TimeModel
         }
 
         //万一小于2个，退出
-        if (count($level1_uids) < 2) {
+        if (count($level1_uids) < 1) {
             return [];
+        }
+
+        //万一只有A线
+        if (count($level1_uids) == 1) {
+            //A线所有下级，包括自己
+            $a_subordinates = self::getAllSubordinates($level1_uids[0]);
+
+            //A线所有位置1下级，包括自己
+            $a_position1_subordinates = self::getAllSubordinatesPosition1($level1_uids[0]);
+
+            //A线所有属于自己的位置1下级个数
+            $a_position1_subordinates_me = self::whereIn('member_uid', $a_position1_subordinates)->where('referrer', $uid)->count();
+
+            //A线团队业绩，包括A自己
+            $a_performance = Orders::getTeamPerformance($a_subordinates) + Orders::cumulative_investment($level1_uids[0]);
+
+            $arr =  [
+                'a_uid'             =>  $level1_uids[0],
+                'a_performance'     =>  $a_performance,
+                'a_num'             =>  count($a_subordinates),
+                'a_position1'       =>  $a_position1_subordinates,
+                'b_uid'             =>  0,
+                'b_performance'     =>  0,
+                'b_num'             =>  0,
+                'b_position1'       =>  0,
+                'last_group'        =>  $a_position1_subordinates_me > 1 ? 2 : 1,
+            ];
+
+            return $arr;
         }
 
         //A线所有下级，包括自己
