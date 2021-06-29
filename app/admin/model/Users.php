@@ -34,7 +34,7 @@ class Users extends TimeModel
             //公排关系处理
             Commonpath::addCommonpath($result->id, $fid);
 
-            $user = self::field('id,address,amount1,amount2,amount3,quota')->find($result->id);
+            $user = self::field('id,address,account1,account2')->find($result->id);
 
             Db::commit();
         } catch (\Exception $e) {
