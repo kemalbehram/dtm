@@ -8,7 +8,11 @@
             <div class="layui-input-inline" style="width: 100px;">
                 <input type="text" name="buy_fee" value="{:sysconfig('other','buy_fee')}" placeholder="请输入比例" class="layui-input">
             </div>
-            <div class="layui-form-mid">%手续费</div>
+            <div class="layui-form-mid">%手续费，剩下的再拿</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="buy_fee" value="{:sysconfig('other','buy_fee')}" placeholder="请输入比例" class="layui-input">
+            </div>
+            <div class="layui-form-mid">%自动购买7天的质押，最后的剩下的才是实际到账的
         </div>
     </div>
     <div class="layui-form-item">
