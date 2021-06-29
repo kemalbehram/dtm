@@ -45,8 +45,6 @@ class Users extends AdminController
                 ->select();
             foreach ($list as &$v) {
                 $v['fl_time'] = !empty($v['fl_time']) ? date('Y-m-d H:i:s', $v['fl_time']) : '无';
-                //管理奖等级
-                $v['level'] = \app\admin\model\Users::management_level($v['id'])['level'] ?? '无';
             }
             $data = [
                 'code'  => 0,
