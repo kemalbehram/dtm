@@ -1,30 +1,5 @@
 <form id="app-form" class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <tip style="font-size: 15px;color: red;font-weight:bold;">双倍出局</tip>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">默认每天按</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="release_ratio" value="{:sysconfig('other','release_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%的比例递减释放额度到2个USDT账户（可在“用户列表”中单独设置某个用户的释放比例）</div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">额度超过2万的部分，静态释放的比例减为原来比例的</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="dec1_ratio" value="{:sysconfig('other','dec1_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%，超过5万的部分 比例减为</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="dec2_ratio" value="{:sysconfig('other','dec2_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%，额度低于1不释放</div>
-        </div>
-    </div>
-    <div class="layui-form-item">
         <tip style="font-size: 15px;color: red;font-weight:bold;">直推奖励</tip>
     </div>
     <div class="layui-form-item">
@@ -36,6 +11,7 @@
             <div class="layui-form-mid">%</div>
         </div>
     </div>
+
     <div class="layui-form-item">
         <tip style="font-size: 15px;color: red;font-weight:bold;">质押DTM</tip>
     </div>
@@ -44,7 +20,7 @@
 
             <div class="layui-form-mid">投资：</div>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v1_ljtz" value="{:sysconfig('other','v1_ljtz')}" placeholder="请输入比例" class="layui-input">
+                <input type="text" name="zy_min" value="{:sysconfig('other','zy_min')}" placeholder="请输入比例" class="layui-input">
             </div>
             <div class="layui-form-mid">DTM起步  每天平均返回利息 到期返还本金。每天凌晨派发</div>
 
@@ -75,103 +51,16 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <!--            v2-->
-            <div class="layui-form-mid">v2，本人累计投资</div>
+            <div class="layui-form-mid">提前解押：扣</div>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v2_ljtz" value="{:sysconfig('other','v2_ljtz')}" placeholder="请输入比例" class="layui-input">
+                <input type="text" name="zy_jy" value="{:sysconfig('other','zy_jy')}" placeholder="请输入比例" class="layui-input">
             </div>
-            <div class="layui-form-mid">u以上，且小区累计业绩达到</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v2_yj" value="{:sysconfig('other','v2_yj')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">u，拿小区里面的每一个人投资奖励收益的</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v2_sy_ratio" value="{:sysconfig('other','v2_sy_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%</div>
+            <div class="layui-form-mid">%本金，退回已派发利息。</div>
         </div>
     </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <!--            v3-->
-            <div class="layui-form-mid">v3，本人累计投资</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v3_ljtz" value="{:sysconfig('other','v3_ljtz')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">u以上，且小区累计业绩达到</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v3_yj" value="{:sysconfig('other','v3_yj')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">u，拿小区里面的每一个人投资奖励收益的</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v3_sy_ratio" value="{:sysconfig('other','v3_sy_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%</div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">每日收益封顶金额：自己累积投资额的</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="glj_fd_ratio" value="{:sysconfig('other','glj_fd_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%</div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <tip style="font-size: 15px;color: red;font-weight:bold;">手续费分红</tip>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <div class="layui-form-mid">提币手续费：</div>
-                <div class="layui-input-inline">
-                    <input type="text" name="withdraw_fee" value="{:sysconfig('other','withdraw_fee')}" placeholder="请输入提币手续费" class="layui-input">
-                </div>
-                <div class="layui-form-mid">%</div>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <div class="layui-form-mid">拿全网的提币手续费作为分红，形成个资金池。</div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <div class="layui-form-mid">获取分红的条件是：本人投资</div>
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="fen1" value="{:sysconfig('other','fen1')}" placeholder="请输入金额" class="layui-input">
-                </div>
-                <div class="layui-form-mid">USDT，并且至少直推</div>
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="fen2" value="{:sysconfig('other','fen2')}" placeholder="请输入人数" class="layui-input">
-                </div>
-                <div class="layui-form-mid">人，且他们分别投资</div>
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="fen3" value="{:sysconfig('other','fen3')}" placeholder="请输入金额" class="layui-input">
-                </div>
-                <div class="layui-form-mid">USDT以上。</div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <div class="layui-form-mid">每日，前</div>
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="fen4" value="{:sysconfig('other','fen4')}" placeholder="请输入人数" class="layui-input">
-                </div>
-                <div class="layui-form-mid">个人，是按照以上条件分红，此后在上面条件的基础上每个人还必须是v3级别。</div>
-            </div>
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <tip style="font-size: 15px;color: red;font-weight:bold;">其他</tip>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">所有的奖励拿出</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="unavailable_ratio" value="{:sysconfig('other','unavailable_ratio')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">%放到USDT不可用账户里面，剩余的放到USDT奖金账户里面</div>
-        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
