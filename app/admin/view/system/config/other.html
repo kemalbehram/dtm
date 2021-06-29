@@ -37,22 +37,38 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <tip style="font-size: 15px;color: red;font-weight:bold;">管理奖</tip>
+        <tip style="font-size: 15px;color: red;font-weight:bold;">质押DTM</tip>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-<!--            v1-->
-            <div class="layui-form-mid">v1，本人累计投资</div>
+
+            <div class="layui-form-mid">投资：</div>
             <div class="layui-input-inline" style="width: 100px;">
                 <input type="text" name="v1_ljtz" value="{:sysconfig('other','v1_ljtz')}" placeholder="请输入比例" class="layui-input">
             </div>
-            <div class="layui-form-mid">u以上，且小区累计业绩达到</div>
+            <div class="layui-form-mid">DTM起步  每天平均返回利息 到期返还本金。每天凌晨派发</div>
+
+            <div class="layui-form-mid">1天，利息：</div>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v1_yj" value="{:sysconfig('other','v1_yj')}" placeholder="请输入比例" class="layui-input">
+                <input type="text" name="zy1_lx" value="{:sysconfig('other','zy1_lx')}" placeholder="请输入比例" class="layui-input">
             </div>
-            <div class="layui-form-mid">u，拿小区里面的每一个人投资奖励收益的</div>
+            <div class="layui-form-mid">%</div>
+
+            <div class="layui-form-mid">7天，利息：</div>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="v1_sy_ratio" value="{:sysconfig('other','v1_sy_ratio')}" placeholder="请输入比例" class="layui-input">
+                <input type="text" name="zy7_lx" value="{:sysconfig('other','zy7_lx')}" placeholder="请输入比例" class="layui-input">
+            </div>
+            <div class="layui-form-mid">%</div>
+
+            <div class="layui-form-mid">15天，利息：</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="zy15_lx" value="{:sysconfig('other','zy15_lx')}" placeholder="请输入比例" class="layui-input">
+            </div>
+            <div class="layui-form-mid">%</div>
+
+            <div class="layui-form-mid">30天，利息：</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="zy30_lx" value="{:sysconfig('other','zy30_lx')}" placeholder="请输入比例" class="layui-input">
             </div>
             <div class="layui-form-mid">%</div>
         </div>
