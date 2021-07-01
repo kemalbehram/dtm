@@ -122,4 +122,11 @@ class Orders extends TimeModel
 
         return $average_lx;
     }
+
+    //提前解押
+    public static function jy($order_id)
+    {
+
+    }
+
 }
