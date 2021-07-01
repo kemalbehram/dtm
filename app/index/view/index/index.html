@@ -90,9 +90,9 @@
 <div class="model-container" id="ljtz">
     <div class="overlay"></div>
     <div class="wrap">
-        <div class="title"><a href="javascript:;" class="close">取消</a>投资数量</div>
+        <div class="title"><a href="javascript:;" class="close">取消</a>质押数量</div>
         <div style="height: 50px">
-            <label><span>选择投资期限</span></label>
+            <label><span>选择质押期限</span></label>
             <select name="type" id="type" style="height: 30px;">
                 <option value="1">1天，利息：{:sysconfig('other','zy1_lx')}%，每日返息到期还本</option>
                 <option value="7">7天，利息：{:sysconfig('other','zy7_lx')}%，每日返息到期还本</option>
@@ -101,7 +101,7 @@
             </select>
         </div>
         <div class="input">
-            <label><input type="text" placeholder="请输入要投入的USDT数量" id="amount"></label>
+            <label><input type="text" placeholder="请输入要质押的USDT数量" id="amount"></label>
             <span>USDT</span>
         </div>
         <button class="submit" onclick="start();">提交</button>
