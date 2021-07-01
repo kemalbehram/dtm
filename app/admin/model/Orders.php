@@ -29,30 +29,10 @@ class Orders extends TimeModel
         try {
             $user = Users::find($uid);
 
-            if ($type == 1) {
-
-                if ($user->amount1 < $amount) {
-                    throw new Exception('可用账户余额不足');
-                }
-                $user->amount1 -= $amount;
-
-            } else if ($type == 2) {
-
-                if ($user->amount2 < $amount) {
-                    throw new Exception('不可用账户余额不足');
-                }
-                $user->amount2 -= $amount;
-
-            } else if ($type == 3) {
-
-                if ($user->amount3 < $amount) {
-                    throw new Exception('奖金账户余额不足');
-                }
-                $user->amount3 -= $amount;
-
-            } else {
-                throw new Exception('账户不存在');
+            if ($user->amount2 < $amount) {
+                throw new Exception('DTM余额不足');
             }
+            $user->amount2 -= $amount;
 
             //获得双倍额度
             $user->quota += $amount * 2;

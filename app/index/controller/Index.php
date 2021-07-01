@@ -52,11 +52,13 @@ class Index extends AdminController
         $address = $this->request->param('address/s');
         $type = $this->request->param('type/d');
 
+        $config = sysconfig('other');
+
         $uid = Users::address2id($address);
 
         if (empty($uid)) $this->error('请先连接钱包');
-        if ($amount % 100 <> 0 || $amount <= 0) $this->error('投资金额必须为100的整数倍');
-        if (!in_array($type, [1,2,3])) $this->error('请选择付款账户');
+        if ($amount <= 0 || $amount < $config['zy_min']) $this->error('质押数量最低'.$config['zy_min'].'DTM');
+        if (!in_array($type, [1,7,15,30])) $this->error('请选择质押期限');
 
         try {
             Orders::fund($uid, $type, $amount);
