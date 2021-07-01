@@ -43,6 +43,7 @@ class Orders extends TimeModel
                 'uid'       =>  $user->id,
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
+                'type'      =>  $type,
             ]);
 
             //插入资金日志
