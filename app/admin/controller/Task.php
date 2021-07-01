@@ -93,23 +93,25 @@ class Task extends AdminController
         return 'success';
     }
 
-    //静态奖返利（每日零点后执行）
+    //DTM质押返利（每日零点后执行）
     public function task3()
     {
         //返利人数
         $num = 0;
 
-        //获取所有额度大于0，且今日未返利的用户
+        //获取所有状态为派息中的订单
         //为方便客户测试，去掉了每日一次结算限制，改成了请求一次结算一次，后期改回
-        $users = Users::where('quota','>',0)
-//                ->where('fl_time', '<', date('Y-m-d'))
-                ->select();
-        foreach ($users as $user) {
+        $order_ids = Orders::where('status',0)
+//                ->where('fl_time', '<', strtotime(date('Y-m-d')))
+                ->column('id');
+        foreach ($order_ids as $order_id) {
             //执行返利
-            $result = Users::rebate($user->id);
+            $result = Orders::rebate($order_id);
             $result && $num++;
         }
+
         return '今日返利人数：'.$num.'人';
+
     }
 
     //手续费资金池每日分红

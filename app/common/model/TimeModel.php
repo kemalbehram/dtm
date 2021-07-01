@@ -41,7 +41,7 @@ class TimeModel extends Model
      * 资金日志对照
      */
     public static $mtype = [
-        1  =>  '静态奖',
+        1  =>  '质押返利',
         2  =>  '质押投资',
         3  =>  '直推奖励',
         4  =>  '管理奖',
