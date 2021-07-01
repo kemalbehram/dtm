@@ -63,10 +63,10 @@ class Index extends AdminController
         try {
             Orders::fund($uid, $type, $amount);
         } catch (\Exception $e) {
-            $this->error('投资失败：'.$e->getMessage());
+            $this->error('质押失败：'.$e->getMessage());
         }
 
-        $this->success('投资成功');
+        $this->success('质押成功');
     }
 
     public function money_log()
