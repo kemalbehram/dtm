@@ -78,44 +78,42 @@ class Users extends TimeModel
         return true;
     }
 
-    //直推返利功能
+    //推荐奖功能
     public static function pushReward(int $uid, float $amount)
     {
         //获取配置
         $config = sysconfig('other');
-        //直推获得下级会员释放部分的 X %
-        $zt_ratio = floatval($config['zt_ratio']) / 100;
 
         //查询上级
         $fid = self::getFid($uid);
 
         //如果上级存在 且 直推奖励已开启
-        if ($fid > 0 && $zt_ratio > 0) {
-            //获取上级信息
-            $fuser = self::find($fid);
-
-            //计算上级累计投资金额
-            $cumulative_investment = Orders::cumulative_investment($fid);
-
-            //计算直推奖励
-            $award = $amount * $zt_ratio;
-
-            //上级发生了投资才有奖励
-            //拿直推奖励需要扣掉上级额度
-            //上级额度足够才有奖励
-            if ($cumulative_investment > 0 && ($fuser->quota >= $award)) {
-
-                //直推奖励入账
-                self::income($fid, $award);
-
-                //扣掉上级额度
-                $fuser->quota -= $award;
-                $fuser->save();
-
-                //插入资金日志
-                MoneyLog::addLog($fid, 0, $award, 3, $uid);
-            }
-        }
+//        if ($fid > 0 && $zt_ratio > 0) {
+//            //获取上级信息
+//            $fuser = self::find($fid);
+//
+//            //计算上级累计投资金额
+//            $cumulative_investment = Orders::cumulative_investment($fid);
+//
+//            //计算直推奖励
+//            $award = $amount * $zt_ratio;
+//
+//            //上级发生了投资才有奖励
+//            //拿直推奖励需要扣掉上级额度
+//            //上级额度足够才有奖励
+//            if ($cumulative_investment > 0 && ($fuser->quota >= $award)) {
+//
+//                //直推奖励入账
+//                self::income($fid, $award);
+//
+//                //扣掉上级额度
+//                $fuser->quota -= $award;
+//                $fuser->save();
+//
+//                //插入资金日志
+//                MoneyLog::addLog($fid, 0, $award, 3, $uid);
+//            }
+//        }
     }
 
 

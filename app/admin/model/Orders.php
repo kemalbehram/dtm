@@ -43,6 +43,8 @@ class Orders extends TimeModel
                 'type'      =>  $type,
             ]);
 
+            //推荐奖
+
             //插入资金日志
             MoneyLog::addLog($user->id,1, $amount,2, $res->id);
 
