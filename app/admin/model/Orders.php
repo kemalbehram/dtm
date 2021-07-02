@@ -65,7 +65,7 @@ class Orders extends TimeModel
         //如果订单不存在
         if (empty($order)) return false;
 
-        //如果返利已经完成、状态不正确
+        //如果返利已经完成 或 状态不正确
         if (($order->finish >= $order->type) || $order->status <> 0) return false;
 
         //计算平均利息
@@ -181,7 +181,7 @@ class Orders extends TimeModel
             Users::changeAmount($order->uid, 2, $amount);
 
             //插入资金日志
-            MoneyLog::addLog($order->uid, 0, $amount, 10, $order->id);
+            MoneyLog::addLog($order->uid, $amount > 0 ? 0 : 0, $amount, 10, $order->id);
 
             Db::commit();
 
