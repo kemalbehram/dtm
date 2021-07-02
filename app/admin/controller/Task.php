@@ -46,13 +46,10 @@ class Task extends AdminController
     //检测并入库充值记录
     public function task2()
     {
-        //取得AUK/USDT价格
-        $price = sysconfig('other','auk_usdt_price');
-
         //筛选所有未处理的数据
         $data = Recharge::where('status', 0)->select();
 
-        //循环处理
+        //循环处理订单
         foreach ($data as $v) {
             //获取用户资料
             $user = Users::where('address', $v->from_address)->find();
@@ -64,24 +61,24 @@ class Task extends AdminController
                 continue;
             }
 
-            //AUK换算成USDT
-            $amount = $v->amount * $price;
-
             //开启事务
             Db::startTrans();
             try {
                 //资金入账
-                $user->amount1 += $amount;
+                $user->amount1 += $v->amount;
+
+                //累加 用户累计充值金额
+                $user->all_recharge += $v->amount;
+
+                //提交数据
                 $user->save();
 
                 //插入资金日志
-                MoneyLog::addLog($user->id,0, $amount,5, $v->id);
+                MoneyLog::addLog($user->id,0, $v->amount,5, $v->id);
 
-                //充值记录标记为已处理、已入账，添加换算数量、汇率
+                //充值记录标记为已处理、已入账
                 $v->status = 1;
                 $v->state = 1;
-                $v->real_amount = $amount;
-                $v->price = $price;
                 $v->save();
 
                 Db::commit();

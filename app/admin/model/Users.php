@@ -84,145 +84,69 @@ class Users extends TimeModel
         //获取配置
         $config = sysconfig('other');
 
-        //查询上级
+        //查询上级id
         $fid = self::getFid($uid);
 
-        //如果上级存在 且 直推奖励已开启
-//        if ($fid > 0 && $zt_ratio > 0) {
-//            //获取上级信息
-//            $fuser = self::find($fid);
-//
-//            //计算上级累计投资金额
-//            $cumulative_investment = Orders::cumulative_investment($fid);
-//
-//            //计算直推奖励
-//            $award = $amount * $zt_ratio;
-//
-//            //上级发生了投资才有奖励
-//            //拿直推奖励需要扣掉上级额度
-//            //上级额度足够才有奖励
-//            if ($cumulative_investment > 0 && ($fuser->quota >= $award)) {
-//
-//                //直推奖励入账
-//                self::income($fid, $award);
-//
-//                //扣掉上级额度
-//                $fuser->quota -= $award;
-//                $fuser->save();
-//
-//                //插入资金日志
-//                MoneyLog::addLog($fid, 0, $award, 3, $uid);
-//            }
-//        }
-    }
+        //向上奖励三代
+        foreach (range(1,3) as $v) {
 
+            //查询上级信息
+            $parent_info = self::find($fid);
 
-    //管理奖功能
-    public static function management_award(int $uid, float $amount)
-    {
-        try {
-            //获取配置
-            $config = sysconfig('other');
+            //如果上级存在且奖励开启
+            if (!empty($parent_info) && !empty($config['ttj'.$v])) {
 
-            //查询累计投资金额
-            $cumulative_investment = Orders::cumulative_investment($uid);
+                //计算奖金
+                $award = $amount * $config['ttj'.$v] / 100;
 
-            //管理奖每日封顶是自己累积投资额的 X%
-            $capped = $cumulative_investment * (float)$config['glj_fd_ratio'] / 100;
-
-            //今日已获得的管理奖总额
-            $today_award = MoneyLog::whereDay('create_time')->where(['mtype' => 4, 'uid' => $uid])->sum('amount');
-
-            //封顶检测，(没有等于的情况因为0 = 0)
-            if ($today_award > $capped) return false;
-
-            //查询用户的所有公排上级
-            $uids = Commonpath::where('member_uid', $uid)->column('uid');
-            //去重
-            $uids = array_unique(array_values($uids));
-
-            //公排上级检测
-            if (empty($uids)) return false;
-
-            //分别对每个公排上级进行判断
-            foreach ($uids as $v) {
-                //查询管理奖等级
-                $level = self::management_level($v);
-
-                //过滤用户
-                if (empty($level)) continue;
-
-                //计算管理奖
-                $award = $amount * $level['ratio'];
-
-                //查询用户信息
-                $user = self::find($v);
-
-                //过滤额度不足的
-                if ($award > $user->quota) continue;
-
-                //发放管理奖
-                self::income($v, $award);
-
-                //扣除额度
-                $user->quota -= $award;
-                $user->save();
+                //收益入账
+                self::changeAmount($fid, 2, $award);
 
                 //插入资金日志
-                MoneyLog::addLog($v,0,$award,4, $uid);
+                MoneyLog::addLog($fid, 0, $award, 3, $fid);
+
+                //查询上上级id，覆盖当前上级id
+                $fid = self::getFid($fid);
+
+            } else {
+                break;
             }
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
         }
     }
 
-    //查询管理奖等级
-    //示例：
-    //v1，本人累计投资300u以上，且小区累计业绩达到300u，拿小区里面的每一个人投资奖励收益的10%
-    //v2，本人累计投资1000u以上，且小区累计业绩达到3000u，拿15%
-    //v3，本人累计投资3000u以上，且小区累积业绩达到30000万u，拿20%
-    public static function management_level(int $uid)
+    //收益奖功能
+    public static function incomeReward(int $uid, float $amount)
     {
         //获取配置
         $config = sysconfig('other');
 
-        //查询累计投资金额
-        $cumulative_investment = Orders::cumulative_investment($uid);
+        //查询上级id
+        $fid = self::getFid($uid);
 
-//        halt($cumulative_investment);
+        //向上奖励三代
+        foreach (range(1,3) as $v) {
 
-        //查询AB线业绩
-        $getAbPerformance = Commonpath::getAbPerformance($uid);
+            //查询上级信息
+            $parent_info = self::find($fid);
 
-//        halt($getAbPerformance);
+            //如果上级存在且奖励开启
+            if (!empty($parent_info) && !empty($config['syj'.$v])) {
 
-        //如果业绩不存在
-        if (empty($getAbPerformance))  return [];
+                //计算奖金
+                $award = $amount * $config['syj'.$v] / 100;
 
-        //业绩数组
-        $arr = [$getAbPerformance['a_performance'], $getAbPerformance['b_performance']];
+                //收益入账
+                self::changeAmount($fid, 2, $award);
 
-        //取得小区业绩
-        $minPerformance = min($arr);
+                //插入资金日志
+                MoneyLog::addLog($fid, 0, $award, 3, $fid);
 
-        //等级判断
-        if (
-            $cumulative_investment >= (float)$config['v3_ljtz'] &&
-            $minPerformance >= (float)$config['v3_yj']
-        ){
-            return ['level' => 3, 'ratio' => (float)$config['v3_sy_ratio'] / 100];
-        } else if (
-            $cumulative_investment >= (float)$config['v2_ljtz'] &&
-            $minPerformance >= (float)$config['v2_yj']
-        ){
-            return ['level' => 2, 'ratio' => (float)$config['v2_sy_ratio'] / 100];
-        } else if (
-            $cumulative_investment >= (float)$config['v1_ljtz'] &&
-            $minPerformance >= (float)$config['v1_yj']
-        ){
-            return ['level' => 1, 'ratio' => (float)$config['v1_sy_ratio'] / 100];
-        } else {
-            return [];
+                //查询上上级id，覆盖当前上级id
+                $fid = self::getFid($fid);
+
+            } else {
+                break;
+            }
         }
     }
 }
