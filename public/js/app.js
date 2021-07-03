@@ -38,7 +38,11 @@ function getAddress() {
         if (!error) now_address =  result;
     });
 
-    if (now_address) return now_address;
+    if (now_address) {
+        console.log(now_address);
+        return now_address;
+    }
+
     return;
 }
 
