@@ -22,11 +22,6 @@ $(function () {
 });
 
 function getAddress() {
-    // if(window.tronWeb && window.tronWeb.defaultAddress.base58){
-    //     return window.tronWeb.defaultAddress.base58;
-    // }
-    // return;
-
     var now_address;
     var web3Provider;
     if (window.ethereum) {
