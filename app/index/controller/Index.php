@@ -84,4 +84,27 @@ class Index extends AdminController
         }
         $this->success('获取成功', $data);
     }
+
+    public function buy()
+    {
+        $amount = $this->request->param('amount/d');
+        $address = $this->request->param('address/s');
+        $type = $this->request->param('type/d',1);
+
+        $config = sysconfig('other');
+
+        $uid = Users::address2id($address);
+
+        if (empty($uid)) $this->error('请先连接钱包');
+        if ($amount <= 0 || $amount < $config['zy_min']) $this->error('质押数量最低'.$config['zy_min'].'DTM');
+        if (!in_array($type, [1,7,15,30])) $this->error('请选择质押期限');
+
+        try {
+            Orders::fund($uid, $type, $amount);
+        } catch (\Exception $e) {
+            $this->error('质押失败：'.$e->getMessage());
+        }
+
+        $this->success('质押成功');
+    }
 }
