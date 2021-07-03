@@ -75,12 +75,13 @@ class Users extends TimeModel
         return true;
     }
 
-    //查询某账号下是否有3个排位下级
+    //查询某账号下面 是否至少3个排位下级
     public static function isCommonpathNum3(int $uid)
     {
         //节点成员
         $level1_uids = self::getLevel1($uid);
 
+        //是否大于3个
         if (count($level1_uids) >= 3) {
             return true;
         }
