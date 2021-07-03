@@ -160,7 +160,7 @@ function get_money_log() {
 }
 
 $('.withdraw').on('click', function () {
-    layer.confirm('确定将奖金账户余额全部提现？', {
+    layer.confirm('确定提现全部USDT？', {
         btn: ['确定','取消']
     }, function(){
         let address = getAddress();
