@@ -81,6 +81,9 @@ class Task extends AdminController
                 $v->state = 1;
                 $v->save();
 
+                //充值排位
+                Recharge::rechargeAddCommonpath($user->id);
+
                 Db::commit();
             } catch (\Exception $e) {
                 Db::rollback();
