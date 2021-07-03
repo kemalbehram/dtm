@@ -6,6 +6,7 @@ use app\common\model\TimeModel;
 use think\Exception;
 use think\facade\Cache;
 use think\facade\Db;
+use think\facade\Log;
 
 class Commonpath extends TimeModel
 {
@@ -16,88 +17,93 @@ class Commonpath extends TimeModel
     public static function addCommonpath(int $uid, int $fid)
     {
         try {
-            //如果没有上级，就是系统第一人，不处理公排关系
+
+            //如果没有上级，不处理公排关系
             if (empty($fid)) return false;
 
             //查询上级第一层节点情况
             $f_level1_uids = self::getLevel1($fid);
 
             //上级第一层节点数量
-            $f_level1_num = count($f_level1_uids);
+            $f_level1_uids_num = count($f_level1_uids);
 
-            //如果上级没有第一层节点，就直接排到他下面，并挂载到位置1
-            if ($f_level1_num == 0) {
+            //如果上级的第一层节点数量小于3，就直接排到他下面相应位置
+            if ($f_level1_uids_num < 3) {
 
-                self::addPath($uid, $fid, $fid,1);
+                //位置 = 节点数 + 1
+                self::addPath($uid, $fid, $fid,$f_level1_uids_num + 1);
 
-            } else if ($f_level1_num == 1) {
+            } else {
 
-                //如果上级有一个第一层节点，取上级的位置1节点数量
-                $subordinates = self::getAllSubordinatesPosition1($fid);
+                //否则查找上级的末级叶子节点
+                $last_id = self::getLast($fid);
 
-                //查询这些位置1节点中，是否有上级自己推荐的
-                $is_me = self::getPosition1ForMe($subordinates, $fid);
+                //查询末级叶子节点的上级
+                $last_fid = self::getFuid($last_id);
 
-                //取上级的叶子节点
-                $leaf = self::getLast($fid);
+                //查询末级叶子节点的上级的第一层节点情况
+                $last_fid_child = self::getLevel1($last_fid);
 
-                //如果没有位置1节点，那么就放到叶子节点下，并挂载成位置1
-                if (empty($subordinates) || !$is_me) {
+                //末级叶子节点的上级的第一层节点数量
+                $last_fid_child_count = count($last_fid_child);
 
-                    self::addPath($uid, $leaf, $fid, 1);
+                //如果末级叶子节点的上级的第一层节点数量小于3，排到末级叶子节点的上级的相应位置即可
+                if ($last_fid_child_count < 3) {
+
+                    self::addPath($uid, $last_fid, $fid,$last_fid_child_count + 1);
 
                 } else {
 
-                    //否则直接挂载到上级的位置2
-                    self::addPath($uid, $fid, $fid, 2);
+                    //否则要看看末级叶子节点的上级在他自己这一层的位置
 
-                }
-            } else {
+                    //查询末级叶子节点的上级相对于fid的层级
+                    $last_fid_level = self::where(['uid' => $fid, 'member_uid' => $last_fid])->value('level');
 
-                //否则，查询上级的AB线业绩（也就是他的2个子节点各自的团体业绩）
-                $performances = self::getAbPerformance($fid);
+                    //查询fid在该层的所有成员
+                    $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->column('member_uid');
 
-                //如果业绩正常
-                if (!empty($performances)) {
+                    //查询末级叶子节点的上级在这一层的位置
 
-                    //默认选定A线
-                    $rank_uid = $performances['a_uid'];
-                    //默认选定A线的叶子节点
-                    $last_uid = !empty($performances['a_position1']) ? max($performances['a_position1']) : $rank_uid;
+                    $last_fid_position = array_search($fid_level_child, $last_fid);
 
-                    //判断AB线业绩是否相等，相等就轮流排
-                    if ($performances['a_performance'] == $performances['b_performance']) {
+                    //如果这个位置存在
+                    if (!empty($last_fid_position)) {
 
-//                        print_r($performances);exit;
+                        //如果位置不在该层的末尾
+                        if ($last_fid_position < count($fid_level_child)) {
 
-                        //轮流排，优先选择还没排的线
-                        if ($performances['last_group'] == 2) {
-                            $rank_uid = $performances['b_uid'];
-                            $last_uid = !empty($performances['b_position1']) ? max($performances['b_position1']) : $rank_uid;
+                            //取得该位置的下一个位置成员id
+                            $next_id = $fid_level_child[$last_fid_position + 1];
+
+                            //排在这个id下面, 且其位置肯定为1（没有子元素的新节点）
+                            self::addPath($uid, $next_id, $fid,1);
+
+                        } else {
+
+                            //如果在该层末尾，需要排到该层第一个元素下面, 且其位置也肯定为1（没有子元素的新节点）
+                            self::addPath($uid, $fid_level_child[0], $fid,1);
+
                         }
 
                     } else {
 
-                        //如果业绩不等，就取小区
-                        if ($performances['a_performance'] > $performances['b_performance']) {
-                            $rank_uid = $performances['b_uid'];
-                            $last_uid = !empty($performances['b_position1']) ? max($performances['b_position1']) : $rank_uid;
-                        }
+                        //找不到位置，记录个日志
+                        throw new Exception('找不到'.$last_fid.'在'.$fid.'的第'.$last_fid_level.'层中的位置');
 
                     }
 
-                    //选举情况调试
-//                     var_dump($rank_uid);exit;
-
-                    //叶子节点
-//                    var_dump($last_uid);exit;
-
-                    self::addPath($uid, $last_uid, $fid, 1);
-
                 }
+
             }
+
         } catch (\Exception $e) {
+
+            //日志记录
+            Log::write($e->getMessage());
+
+            //向外层抛出错误
             throw new Exception($e->getMessage());
+
         }
 
         return false;
@@ -110,8 +116,8 @@ class Commonpath extends TimeModel
         return array_values($arr);
     }
 
-    //查询某账号的末级
-    //最大level可能有2个叶子节点，取ID最大即可
+    //查询某账号的排位末级
+    //最大level可能有3个叶子节点，取ID最大即可
     public static function getLast(int $uid)
     {
         return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->limit(1)->value('member_uid');
@@ -124,122 +130,10 @@ class Commonpath extends TimeModel
         return array_values($arr);
     }
 
-    //递归查询某账号的所有位置为1的一串公排下级
-    public static function getAllSubordinatesPosition1(int $uid)
-    {
-        $arr = [];
-        $stop = true;
-        do {
-            $position1 = self::where(['uid' => $uid, 'level' => 1, 'position' => 1])->value('member_uid');
-            if (empty($position1)) {
-                $stop = false;
-            } else {
-                $arr[] = $position1;
-                $uid = $position1;
-            }
-        } while($stop);
-        return $arr;
-    }
-
-    //查询位置1节点组里面，是否有自己推荐的
-    public static function getPosition1ForMe(array $position1, int $uid) {
-        if (empty($position1)) {
-            return false;
-        }
-        return self::whereIn('member_uid', $position1)->where('referrer', $uid)->count() ? true : false;
-    }
-
     //查询某账号的公排上级
     public static function getFuid($uid)
     {
         return self::where(['member_uid' => $uid, 'level' => 1])->value('uid');
-    }
-
-
-    //查询某账号AB线业绩
-    public static function getAbPerformance(int $uid):array
-    {
-        //获取他的一级节点
-        $level1_uids = self::getLevel1($uid);
-
-//        var_dump($level1_uids);exit;
-
-        //万一有2个以上，只取2个
-        if (count($level1_uids) > 2) {
-            $level1_uids = array_slice($level1_uids, 1);
-        }
-
-        //万一小于2个，退出
-        if (count($level1_uids) < 1) {
-            return [];
-        }
-
-        //万一只有A线
-        if (count($level1_uids) == 1) {
-            //A线所有下级，包括自己
-            $a_subordinates = self::getAllSubordinates($level1_uids[0]);
-
-            //A线所有位置1下级，包括自己
-            $a_position1_subordinates = self::getAllSubordinatesPosition1($level1_uids[0]);
-
-            //A线所有属于自己的位置1下级个数
-            $a_position1_subordinates_me = self::whereIn('member_uid', $a_position1_subordinates)->where('referrer', $uid)->count();
-
-            //A线团队业绩，包括A自己
-            $a_performance = Orders::getTeamPerformance($a_subordinates) + Orders::cumulative_investment($level1_uids[0]);
-
-            $arr =  [
-                'a_uid'             =>  $level1_uids[0],
-                'a_performance'     =>  $a_performance,
-                'a_num'             =>  count($a_subordinates),
-                'a_position1'       =>  $a_position1_subordinates,
-                'b_uid'             =>  0,
-                'b_performance'     =>  0,
-                'b_num'             =>  0,
-                'b_position1'       =>  0,
-                'last_group'        =>  $a_position1_subordinates_me > 1 ? 2 : 1,
-            ];
-
-            return $arr;
-        }
-
-        //A线所有下级，包括自己
-        $a_subordinates = self::getAllSubordinates($level1_uids[0]);
-
-        //B线所有下级，包括自己
-        $b_subordinates = self::getAllSubordinates($level1_uids[1]);
-
-        //A线所有位置1下级，包括自己
-        $a_position1_subordinates = self::getAllSubordinatesPosition1($level1_uids[0]);
-
-        //A线所有属于自己的位置1下级个数
-        $a_position1_subordinates_me = self::whereIn('member_uid', $a_position1_subordinates)->where('referrer', $uid)->count();
-
-        //B线所有位置1下级
-        $b_position1_subordinates = self::getAllSubordinatesPosition1($level1_uids[1]);
-
-        //B线所有属于自己的位置1下级个数，包括自己
-        $b_position1_subordinates_me = self::whereIn('member_uid', $b_position1_subordinates)->where('referrer', $uid)->count() + 1;
-
-        //A线团队业绩，包括A自己
-        $a_performance = Orders::getTeamPerformance($a_subordinates) + Orders::cumulative_investment($level1_uids[0]);
-
-        //B线团队业绩，包括B自己
-        $b_performance = Orders::getTeamPerformance($b_subordinates) + Orders::cumulative_investment($level1_uids[1]);
-
-        $arr =  [
-            'a_uid'             =>  $level1_uids[0],
-            'a_performance'     =>  $a_performance,
-            'a_num'             =>  count($a_subordinates),
-            'a_position1'       =>  $a_position1_subordinates,
-            'b_uid'             =>  $level1_uids[1],
-            'b_performance'     =>  $b_performance,
-            'b_num'             =>  count($b_subordinates),
-            'b_position1'       =>  $b_position1_subordinates,
-            'last_group'        =>  $a_position1_subordinates_me > $b_position1_subordinates_me ? 2 : 1,
-        ];
-
-        return $arr;
     }
 
     //关系入库
@@ -273,7 +167,7 @@ class Commonpath extends TimeModel
                 'member_uid'        =>  $uid,
                 'level'             =>  1,
                 'create_time'       =>  time(),
-                //我是上级的 左节点 or 右节点
+                //我是上级的 1、2、3位置
                 'position'          =>  $position,
                 //我的推荐人
                 'referrer'          =>  $referrer,
@@ -292,15 +186,7 @@ class Commonpath extends TimeModel
     {
         $list = Users::field('id,cid,address as title')->select();
         foreach ($list as &$v) {
-            //AB线
-            $ab_performance = Commonpath::getAbPerformance($v->id);
-            $a_performance = $ab_performance['a_performance'] ?? 0;
-            $b_performance = $ab_performance['b_performance'] ?? 0;
-
-            //管理奖等级
-            $level = Users::management_level($v['id'])['level'] ?? '无';
-
-            $v->title .= '（ID：'.$v->id.'，A线：'.$a_performance.'，B线：'.$b_performance.'，等级：'.$level.'）';
+            $v->title .= '（ID：'.$v->id.'）';
         }
         $tree = list2tree($list->toArray(),'id','cid');
         return $tree;
