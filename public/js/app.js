@@ -4,11 +4,11 @@ $(function () {
     });
 
     $('.js-model').on('click', function () {
-        let address = getAddress();
-        if (empty(address)) {
-            layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
-            return;
-        }
+        // let address = getAddress();
+        // if (empty(address)) {
+        //     layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+        //     return;
+        // }
 
         var id = $(this).data('id');
         $('#' + id).fadeIn();
