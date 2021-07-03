@@ -22,10 +22,26 @@ $(function () {
 });
 
 function getAddress() {
-    if(window.tronWeb && window.tronWeb.defaultAddress.base58){
-        return window.tronWeb.defaultAddress.base58;
+    // if(window.tronWeb && window.tronWeb.defaultAddress.base58){
+    //     return window.tronWeb.defaultAddress.base58;
+    // }
+    // return;
+
+    var web3Provider;
+    if (window.ethereum) {
+        web3Provider = window.ethereum;
+        try {
+            window.ethereum.enable();
+        } catch (error) {
+            // 用户不授权时
+            layer.msg('用户拒绝授权', {icon:2, skin:'white'}, function () {});
+        }
     }
-    return;
+    web3js = new Web3(web3Provider);
+    web3js.eth.getAccounts(function (error, result) {
+        if (!error) return result;
+        return;
+    });
 }
 
 function getUserInfo() {
