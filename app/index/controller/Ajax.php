@@ -154,4 +154,20 @@ class Ajax extends AdminController
         $data = MoneyLog::where('uid', $uid)->order('id','desc')->limit(15)->select();
         $this->success('获取成功', $data);
     }
+
+    //兑换
+    public function exchange()
+    {
+        $get = $this->request->param();
+        $rule = [
+            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'num|兑换数量'         => 'require|float'
+        ];
+        $message = [
+            'address.require'   =>  '请连接钱包',
+            'address.alphaNum'  =>  '请连接钱包',
+            'address.length'    =>  '请连接钱包',
+        ];
+        $this->validate($get, $rule, $message);
+    }
 }
