@@ -31,9 +31,6 @@ class Users extends TimeModel
             //注册关系处理
             Regpath::addRegpath($result->id, $fid);
 
-            //公排关系处理
-            Commonpath::addCommonpath($result->id, $fid);
-
             $user = self::field('id,address,account1,account2')->find($result->id);
 
             Db::commit();
@@ -76,6 +73,19 @@ class Users extends TimeModel
         }
 
         return true;
+    }
+
+    //查询某账号下是否有3个排位下级
+    public static function isCommonpathNum3(int $uid)
+    {
+        //节点成员
+        $level1_uids = self::getLevel1($uid);
+
+        if (count($level1_uids) >= 3) {
+            return true;
+        }
+
+        return false;
     }
 
     //推荐奖功能
