@@ -27,6 +27,7 @@ function getAddress() {
     // }
     // return;
 
+    var now_address;
     var web3Provider;
     if (window.ethereum) {
         web3Provider = window.ethereum;
@@ -39,9 +40,11 @@ function getAddress() {
     }
     web3js = new Web3(web3Provider);
     web3js.eth.getAccounts(function (error, result) {
-        if (!error) return result;
-        return;
+        if (!error) now_address =  result;
     });
+
+    if (now_address) return now_address;
+    return;
 }
 
 function getUserInfo() {
