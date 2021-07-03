@@ -33,14 +33,20 @@
             <div class="layui-form-mid">%</div>
         </div>
     </div>
-
     <div class="layui-form-item">
         <div class="layui-inline">
-            <div class="layui-form-mid">我推荐的人，充值</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="team_recharge" value="{:sysconfig('other','team_recharge')}" placeholder="请输入金额" class="layui-input">
+            <div class="layui-form-mid">DTM/USDT初始价格：</div>
+            <div class="layui-input-inline">
+                <input type="text" name="dtm_usdt_price" value="{:sysconfig('other','dtm_usdt_price')}" placeholder="请输入DTM/USDT价格" class="layui-input">
             </div>
-            <div class="layui-form-mid">USDT或者以上，就能排列在我下面，分三条线，三轨制度</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-mid">DTM买卖价格增减：</div>
+            <div class="layui-input-inline">
+                <input type="text" name="dtm_usdt_price" value="{:sysconfig('other','dtm_usdt_incdec')}" placeholder="请输入DTM买卖价格增减" class="layui-input">
+            </div>
         </div>
     </div>
 
@@ -202,7 +208,24 @@
     </div>
 
     <div class="layui-form-item">
-        <tip style="font-size: 15px;color: red;font-weight:bold;">推广链接</tip>
+        <tip style="font-size: 15px;color: red;font-weight:bold;">其他</tip>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-mid">充值地址(BSC20)：</div>
+            <div class="layui-input-inline" style="width: 500px;">
+                <input type="text" name="recharge_address" value="{:sysconfig('other','recharge_address')}" placeholder="请输入充值地址(BSC20)" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-form-mid">我推荐的人，充值</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="team_recharge" value="{:sysconfig('other','team_recharge')}" placeholder="请输入金额" class="layui-input">
+            </div>
+            <div class="layui-form-mid">USDT或者以上，就能排列在我下面，分三条线，三轨制度</div>
+        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
@@ -211,26 +234,6 @@
                 <input type="text" name="tg_recharge" value="{:sysconfig('other','tg_recharge')}" placeholder="请输入金额" class="layui-input">
             </div>
             <div class="layui-form-mid">USDT以上才显示</div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <tip style="font-size: 15px;color: red;font-weight:bold;">其他</tip>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">充值地址(TRC20)：</div>
-            <div class="layui-input-inline" style="width: 500px;">
-                <input type="text" name="recharge_address" value="{:sysconfig('other','recharge_address')}" placeholder="请输入充值地址(TRC20)" class="layui-input">
-            </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">DTM/USDT初始价格：</div>
-            <div class="layui-input-inline">
-                <input type="text" name="dtm_usdt_price" value="{:sysconfig('other','dtm_usdt_price')}" placeholder="请输入DTM/USDT价格" class="layui-input">
-            </div>
         </div>
     </div>
 
