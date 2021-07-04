@@ -34,6 +34,7 @@ class Orders extends TimeModel
                 throw new Exception('DTM余额不足');
             }
             $user->amount2 -= $amount;
+            $user->save();
 
             //产生订单记录
             $res = self::create([
