@@ -85,7 +85,8 @@ class Index extends AdminController
         $this->success('获取成功', $data);
     }
 
-    public function buy()
+    //兑换
+    public function exchange()
     {
         $amount = $this->request->param('amount/d');
         $address = $this->request->param('address/s');
@@ -96,16 +97,26 @@ class Index extends AdminController
         $uid = Users::address2id($address);
 
         if (empty($uid)) $this->error('请先连接钱包');
-        if ($amount <= 0) $this->error('兑换数量不能低于0');
-        if ($amount <= floatval($config['business_deal_min'])) $this->error('兑换数量不能低于 '.$config['business_deal_min'].' DTM');
+        if ($amount <= 0) $this->error('数量不能低于0');
         if (!in_array($type, [1,2])) $this->error('提交数据出错');
 
-        try {
-
-        } catch (\Exception $e) {
-            $this->error('质押失败：'.$e->getMessage());
+        if ($type == 1) {
+            $dtm_num = $amount / floatval($config['dtm_usdt_price']);
+            if ($dtm_num < floatval($config['business_deal_min'])) $this->error('买入数量不能低于 '.$config['business_deal_min'].' DTM');
+        } else {
+            if ($amount < floatval($config['business_deal_min'])) $this->error('卖出数量不能低于 '.$config['business_deal_min'].' DTM');
         }
 
-        $this->success('质押成功');
+        try {
+            if ($type == 1) {
+                Users::usdt2dtm($uid, $amount);
+            } else {
+                Users::dtm2usdt($uid, $amount);
+            }
+        } catch (\Exception $e) {
+            $this->error('兑换失败：'.$e->getMessage());
+        }
+
+        $this->success('兑换成功');
     }
 }
