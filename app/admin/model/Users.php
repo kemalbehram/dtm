@@ -2,6 +2,7 @@
 
 namespace app\admin\model;
 
+use app\admin\service\TriggerService;
 use app\common\model\TimeModel;
 use think\Exception;
 use think\facade\Db;
@@ -198,6 +199,7 @@ class Users extends TimeModel
             //每次兑换后DTM价格涨一点
             $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
             SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num);
+            TriggerService::updateSysconfig();
 
             //资金日志
             MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
