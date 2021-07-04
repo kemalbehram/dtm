@@ -15,7 +15,7 @@ use app\admin\model\Orders;
 //定时任务
 class Task extends AdminController
 {
-    //采集AUK充值记录
+    //采集BUSD充值记录
     public function task1() {
         $address = sysconfig('other','recharge_address');
         $url = 'https://api.trongrid.io/v1/accounts/'.$address.'/transactions/trc20?only_confirmed=true&only_to=true&limit=30&contract_address=TGkp9HB9v5DDEJqCqoS7iLYnCobAnqG7zN';
