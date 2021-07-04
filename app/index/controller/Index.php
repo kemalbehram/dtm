@@ -110,8 +110,8 @@ class Index extends AdminController
         }
 
         try {
-            var_dump($type);exit;
             if ($type == 1) {
+                var_dump('1111');exit;
                 Users::usdt2dtm($uid, $amount);
             } else {
                 Users::dtm2usdt($uid, $amount);
