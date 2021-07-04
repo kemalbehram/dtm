@@ -62,6 +62,7 @@ function getUserInfo() {
                     $('.buy_fee').html(res.data.buy_fee);
                     $('.auto_buy_bl').html(res.data.auto_buy_bl);
                     $('.dtm_usdt_price').html(res.data.dtm_usdt_price);
+                    $('.sell_fee').html(res.data.sell_fee);
 
                 }catch (e) {}
             }
@@ -209,6 +210,14 @@ function buy_amount_calc() {
     $('.real_amount').html(real_amount);
 }
 
+function sell_amount_calc() {
+    var price = parseFloat($('.dtm_usdt_price').html())
+        ,sell_fee = parseFloat($('.sell_fee').html())
+        ,sell_amount = parseFloat($('#sell_amount').val());
+    var sell_real_amount = sell_amount * price * (1 - sell_fee / 100);
+    $('.sell_real_amount').html(sell_real_amount);
+}
+
 function buy() {
     let amount = parseFloat($('#buy_amount').val());
     let address = getAddress();
@@ -225,6 +234,37 @@ function buy() {
         type: 'POST',
         dataType: 'json',
         data: {type: 1, amount: amount, address: address},
+        success: function (res) {
+            console.log(res);
+            if (res.code == 1){
+                layer.msg(res.msg, {icon: 1});
+                window.location.reload();
+                return true;
+            }
+            layer.msg(res.msg, {icon: 2});
+        },
+        error: function () {
+            console.log('error');
+        }
+    });
+}
+
+function sell() {
+    let amount = parseFloat($('#sell_amount').val());
+    let address = getAddress();
+    if (empty(address)) {
+        layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+        return;
+    }
+    if (empty(amount)) {
+        layer.msg('请输入兑换数量', {icon:2, skin:'white'}, function () {});
+        return;
+    }
+    $.ajax({
+        url: '/exchange',
+        type: 'POST',
+        dataType: 'json',
+        data: {type: 2, amount: amount, address: address},
         success: function (res) {
             console.log(res);
             if (res.code == 1){

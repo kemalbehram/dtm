@@ -90,6 +90,22 @@ class Users extends TimeModel
         return false;
     }
 
+    //获取卖出DTM手续费
+    public static function getSellFee(int $uid)
+    {
+        $config = sysconfig('other');
+
+        //默认手续费50% (USDT)
+        $sell_fee = floatval($config['sell_fee2']);
+
+        //下面有三个会员手续费1% (USDT)
+        if (self::isCommonpathNum3($uid)) {
+            $sell_fee = floatval($config['sell_fee1']);
+        }
+
+        return $sell_fee;
+    }
+
     //推荐奖功能
     public static function pushReward(int $uid, float $amount)
     {
@@ -238,13 +254,7 @@ class Users extends TimeModel
             if ($usdt_amount <=0 ) throw new Exception('数量计算出错');
 
             //卖出要扣1%或者50% 手续费，扣1%，需要下面有三个会员（可以是上级给他安排，也可以是自己直推）。扣50%是下面没有三个人排队。
-            //默认手续费50% (USDT)
-            $sell_fee = $usdt_amount * floatval($config['sell_fee2']) / 100;
-
-            //下面有三个会员手续费1% (USDT)
-            if (self::isCommonpathNum3($uid)) {
-                $sell_fee = $usdt_amount * floatval($config['sell_fee1']) / 100;
-            }
+            $sell_fee = self::getSellFee($uid) * $usdt_amount / 100;
 
             //实际到账
             $real_amount = $usdt_amount - $sell_fee;

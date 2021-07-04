@@ -78,6 +78,9 @@ class Ajax extends AdminController
             //DTM/USDT价格
             $user->dtm_usdt_price = (float)$config['dtm_usdt_price'];
 
+            //DTM兑换USDT手续费
+            $user->sell_fee = Users::getSellFee($user->id);
+
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);
         }
