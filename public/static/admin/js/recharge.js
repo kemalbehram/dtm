@@ -26,7 +26,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     },
                     {field: 'from_address', title: '用户地址',width: 340},
                     {field: 'to_address', title: '收款地址',width: 200},
-                    {field: 'amount', title: '充值数量(BSUDT)'},
+                    {field: 'amount', title: '充值数量(BUSD)'},
                     {field: 'status', title: '扫描状态', selectList:{0:'未扫描', 1:'已扫描'}},
                     {field: 'state', title: '入账状态', selectList:{0:'未入账', 1:'已入账'}},
                     {field: 'block_time', title: '区块确认时间', search: 'range', width: 180},
