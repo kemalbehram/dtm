@@ -151,7 +151,7 @@ class Users extends TimeModel
                 self::changeAmount($fid, 2, $award);
 
                 //插入资金日志
-                MoneyLog::addLog($fid, 0, $award, 3, $fid);
+                MoneyLog::addLog($fid, 0, $award, 4, $fid);
 
                 //查询上上级id，覆盖当前上级id
                 $fid = self::getFid($fid);

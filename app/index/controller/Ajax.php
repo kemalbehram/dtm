@@ -47,26 +47,14 @@ class Ajax extends AdminController
 
             //收益统计
             $award = MoneyLog::getAward($user->id);
-            $user->static_award = $award['static_award'];
-            $user->direct_award = $award['direct_award'];
-            $user->manage_award = $award['manage_award'];
+            $user->zy_award = $award['zy_award'];
+            $user->tj_award = $award['tj_award'];
+            $user->sy_award = $award['sy_award'];
+            $user->fh_award = $award['fh_award'];
             $user->all_award = $award['all_award'];
 
-            //分享人数
+            //推广人数
             $user->share_num = Regpath::where(['uid' => $user->id, 'level' => 1])->count();
-
-            //团队人数
-//            $team_uids = Commonpath::where('uid', $user->id)->column('member_uid');
-//            $user->team_num = count($team_uids);
-
-            //脑残客户说改成和分享人数一样
-            $user->team_num = $user->share_num;
-
-            //团队业绩,AB线
-//            $user->team_order_amount = Orders::whereIn('uid', $team_uids)->sum('amount');
-            $ab_performance = Commonpath::getAbPerformance($user->id);
-            $user->a_performance = $ab_performance['a_performance'] ?? 0;
-            $user->b_performance = $ab_performance['b_performance'] ?? 0;
 
             //邀请链接
             $user->invite_url = request()->domain().'/?ref='.$user->address;
@@ -106,10 +94,10 @@ class Ajax extends AdminController
                'real_amount'    =>  $user->amount1 * (1 - sysconfig('other','withdraw_fee') / 100),
             ]);
 
-            $user->amount3 = 0;
+            $user->amount1 = 0;
             $user->save();
 
-            MoneyLog::addLog($user->id, 1, -$user->amount3, 6, $result->id);
+            MoneyLog::addLog($user->id, 1, -$user->amount1, 6, $result->id);
 
             Db::commit();
         }catch (\Exception $e) {
@@ -136,7 +124,7 @@ class Ajax extends AdminController
         $this->success('获取成功', $data);
     }
 
-    //获取最近15条收益记录
+    //获取最近15条资金日志
     public function getMoneyLog()
     {
         $get = $this->request->param();
@@ -156,21 +144,5 @@ class Ajax extends AdminController
 
         $data = MoneyLog::where('uid', $uid)->order('id','desc')->limit(15)->select();
         $this->success('获取成功', $data);
-    }
-
-    //兑换
-    public function exchange()
-    {
-        $get = $this->request->param();
-        $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:42',
-            'num|兑换数量'         => 'require|float'
-        ];
-        $message = [
-            'address.require'   =>  '请连接钱包',
-            'address.alphaNum'  =>  '请连接钱包',
-            'address.length'    =>  '请连接钱包',
-        ];
-        $this->validate($get, $rule, $message);
     }
 }
