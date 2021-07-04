@@ -207,7 +207,6 @@ function buy_amount_calc() {
         ,buy_amount = parseFloat($('#buy_amount').val());
     var real_amount = buy_amount / price * (1 - buy_fee / 100) * (1 - auto_buy_bl / 100);
     $('.real_amount').html(real_amount);
-    console.log(price,buy_fee,auto_buy_bl,buy_amount,real_amount);
 }
 
 function buy() {
