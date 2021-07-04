@@ -48,7 +48,7 @@
             <div class="label" style="line-height: 40px;">DTM账户：<span class="amount2">--</span></div>
             <div class="value">
                 <button class="copy shell">卖出</button>
-                <button class="copy buy js-model" data-id="buy">买入</button>
+                <button class="copy buy js-model" data-id="usdt2dtm">买入</button>
             </div>
         </li>
     </ul>
@@ -99,12 +99,12 @@
     </ul>
 </div>
 
-<div class="model-container" id="buy">
+<div class="model-container" id="usdt2dtm">
     <div class="overlay"></div>
     <div class="wrap">
         <div class="title"><a href="javascript:;" class="close">取消</a>USDT兑换DTM</div>
         <div class="input">
-            <label><input type="text" placeholder="请输入要兑换的USDT数量" id="amount"></label>
+            <label><input type="text" placeholder="请输入要兑换的USDT数量" id="buy_amount"></label>
             <span>USDT</span>
         </div>
         <div style="height: 40px;line-height: 40px;margin-top: 10px;">
@@ -123,9 +123,10 @@
         </div>
         <div style="height: 40px;line-height: 40px;">
             <label><span>实际到账：</span></label>
-            <span class="real_amount"></span>
+            <span class="real_amount">-</span>
+            <span>DTM</span>
         </div>
-        <button class="submit" onclick="start();">提交</button>
+        <button class="submit" onclick="buy();">买入</button>
     </div>
 </div>
 
