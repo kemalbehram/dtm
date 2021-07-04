@@ -36,6 +36,7 @@ class Recharge extends TimeModel
     //充值排位
     public static function rechargeAddCommonpath(int $uid)
     {
+
         $config = sysconfig('other');
 
         $user = Users::find($uid);
