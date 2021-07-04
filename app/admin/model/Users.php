@@ -210,6 +210,8 @@ class Users extends TimeModel
             Orders::auto_fund($uid, 7, $zy_amount);
             //DTM到账
             $user->amount2 += $real_amount;
+            //扣除USDT
+            $user->amount1 -= $amount;
             $user->save();
             //手续费资金池到账
             Pool::addPool($buy_fee);
