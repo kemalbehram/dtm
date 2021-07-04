@@ -26,7 +26,7 @@ class Ajax extends AdminController
     {
         $get = $this->request->param();
         $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'address|钱包地址'     => 'require|alphaNum|length:42',
         ];
         $message = [
             'address.require'   =>  '请连接钱包',
@@ -86,7 +86,7 @@ class Ajax extends AdminController
     {
         $get = $this->request->param();
         $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'address|钱包地址'     => 'require|alphaNum|length:42',
         ];
         $this->validate($get, $rule);
 
@@ -123,7 +123,7 @@ class Ajax extends AdminController
     {
         $get = $this->request->param();
         $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'address|钱包地址'     => 'require|alphaNum|length:42',
         ];
         $message = [
             'address.require'   =>  '请连接钱包',
@@ -141,7 +141,7 @@ class Ajax extends AdminController
     {
         $get = $this->request->param();
         $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'address|钱包地址'     => 'require|alphaNum|length:42',
         ];
         $message = [
             'address.require'   =>  '请连接钱包',
@@ -163,7 +163,7 @@ class Ajax extends AdminController
     {
         $get = $this->request->param();
         $rule = [
-            'address|钱包地址'     => 'require|alphaNum|length:34',
+            'address|钱包地址'     => 'require|alphaNum|length:42',
             'num|兑换数量'         => 'require|float'
         ];
         $message = [
