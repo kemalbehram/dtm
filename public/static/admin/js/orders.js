@@ -13,7 +13,6 @@ define(["jquery", "easy-admin"], function ($, ea) {
         index: function () {
             ea.table.render({
                 init: init,
-                // toolbar: ['refresh', 'delete', 'export'],
                 toolbar: ['refresh', 'export'],
                 cols: [[
                     {type: 'checkbox'},
