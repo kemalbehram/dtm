@@ -69,6 +69,9 @@ class Ajax extends AdminController
             //是否累计充值60U+
             $user->isRecharge60 = (Recharge::getAllRecharge($user->id) < $config['tg_recharge']) ? false : true;
 
+            //USDT兑换DTM手续费
+            $user->buy_fee = floatval($config['buy_fee']);
+
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);
         }

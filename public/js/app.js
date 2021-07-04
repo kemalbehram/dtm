@@ -55,6 +55,8 @@ function getUserInfo() {
                         $('.invite').hide();
                     }
 
+                    $('.buy_fee').html(res.data.buy_fee);
+
                 }catch (e) {}
             }
         },

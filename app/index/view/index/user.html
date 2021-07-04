@@ -102,17 +102,19 @@
 <div class="model-container" id="buy">
     <div class="overlay"></div>
     <div class="wrap">
-        <div class="title"><a href="javascript:;" class="close">取消</a>USDT兑DTM</div>
-        <div style="height: 50px">
-            <label><span>手续费：</span></label>
-            <span>USDT</span>
-        </div>
+        <div class="title"><a href="javascript:;" class="close">取消</a>USDT兑换DTM</div>
         <div class="input">
             <label><input type="text" placeholder="请输入要兑换的USDT数量" id="amount"></label>
             <span>USDT</span>
         </div>
         <div style="height: 50px">
+            <label><span>手续费：</span></label>
+            <span class="buy_fee">-</span>
+            <span>%</span>
+        </div>
+        <div style="height: 50px">
             <label><span>实际到账：</span></label>
+            <span class="real_amount">-</span>
             <span>USDT</span>
         </div>
         <button class="submit" onclick="start();">提交</button>
