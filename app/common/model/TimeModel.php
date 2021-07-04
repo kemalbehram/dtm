@@ -51,6 +51,9 @@ class TimeModel extends Model
         8  =>  '分红',
         9  =>  '质押到期返还本金',
         10 =>  '提前解押返还本金',
+        11 =>  'USDT兑DTM手续费',
+        12 =>  'USDT兑DTM自动质押',
+        13 =>  'USDT兑DTM',
     ];
 
 }

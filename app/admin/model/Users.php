@@ -160,4 +160,95 @@ class Users extends TimeModel
             }
         }
     }
+
+    //USDT兑换DTM
+    public static function usdt2dtm($uid, $amount)
+    {
+        Db::startTrans();
+        try {
+            $config = sysconfig('other');
+
+            //查询用户信息
+            $user = self::find($uid);
+
+            //余额校验
+            if ($user->amount1 < $amount) {
+                throw new Exception('USDT余额不足');
+            }
+
+            //计算获得DTM数量
+            $dtm_amount = $amount / floatval($config['dtm_usdt_price']);
+
+            if ($dtm_amount <=0 ) throw new Exception('数量计算出错');
+
+            //买入扣10%手续费剩下的90%，再拿50%自动购买7天的质押，剩下的才是实际到账的。
+            //兑换DTM手续费
+            $buy_fee = $dtm_amount * floatval($config['buy_fee']) / 100;
+            //质押金额
+            $zy_amount = ($dtm_amount - $buy_fee) * floatval($config['auto_buy_bl']) / 100;
+            //实际到账
+            $real_amount = $dtm_amount - $buy_fee - $zy_amount;
+
+            //开始质押
+            Orders::fund($uid, 7, $zy_amount);
+            //DTM到账
+            $user->amount2 += $real_amount;
+            $user->save();
+
+            //资金日志
+            MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
+            MoneyLog::addLog($uid, 1, $zy_amount, 12, 0);
+            MoneyLog::addLog($uid, 0, $real_amount, 13, 0);
+
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    //DTM兑换USDT
+    public static function dtm2usdt($uid, $amount)
+    {
+        Db::startTrans();
+        try {
+            $config = sysconfig('other');
+
+            //查询用户信息
+            $user = self::find($uid);
+
+            //余额校验
+            if ($user->amount2 < $amount) {
+                throw new Exception('DTM余额不足');
+            }
+
+            //计算获得USDT数量
+            $dtm_amount = $amount * floatval($config['dtm_usdt_price']);
+
+            //买入扣10%手续费剩下的90%，再拿50%自动购买7天的质押，剩下的才是实际到账的。
+            //兑换DTM手续费
+            $buy_fee = $dtm_amount * floatval($config['buy_fee']) / 100;
+            //质押金额
+            $zy_amount = ($dtm_amount - $buy_fee) * floatval($config['auto_buy_bl']) / 100;
+            //实际到账
+            $real_amount = $dtm_amount - $buy_fee - $zy_amount;
+
+            //开始质押
+            Orders::fund($uid, 7, $zy_amount);
+            //DTM到账
+            $user->amount2 += $real_amount;
+            $user->save();
+
+            //资金日志
+            MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
+            MoneyLog::addLog($uid, 1, $zy_amount, 12, 0);
+            MoneyLog::addLog($uid, 0, $real_amount, 13, 0);
+
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            throw new Exception($e->getMessage());
+        }
+    }
+
 }
