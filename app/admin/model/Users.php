@@ -80,7 +80,7 @@ class Users extends TimeModel
     public static function isCommonpathNum3(int $uid)
     {
         //节点成员
-        $level1_uids = self::getLevel1($uid);
+        $level1_uids = Commonpath::getLevel1($uid);
 
         //是否大于3个
         if (count($level1_uids) >= 3) {
