@@ -70,6 +70,7 @@ class Orders extends TimeModel
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
                 'type'      =>  $type,
+                'auto'      =>  1,
             ]);
 
             //推荐奖清算
