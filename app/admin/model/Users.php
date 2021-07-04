@@ -200,7 +200,7 @@ class Users extends TimeModel
 
             //每次兑换后DTM价格涨一点
             $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
-            SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num);
+            SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num)->update();
             TriggerService::updateSysconfig();
 
             //资金日志
@@ -259,7 +259,7 @@ class Users extends TimeModel
 
             //如果减少后还是高于地板价才能继续
             if (floatval($config['dtm_usdt_price']) - $num >= $config['min_dtm_usdt_price']) {
-                SystemConfig::where('name', 'dtm_usdt_price')->dec('value', $num);
+                SystemConfig::where('name', 'dtm_usdt_price')->dec('value', $num)->update();
                 TriggerService::updateSysconfig();
             }
 
@@ -272,6 +272,37 @@ class Users extends TimeModel
             Db::rollback();
             throw new Exception($e->getMessage());
         }
+    }
+
+    //分红统计
+    public static function dividends_statistics()
+    {
+        $arr = [];
+
+        $config = sysconfig('other');
+
+        //先筛选DTM余额大于100的用户
+        $users = self::where('amount2', '>=', floatval($config['fh_ye_min']))->select();
+
+        //如果存在
+        if (!$users->isEmpty()) {
+
+            //再次筛选有3个排位下级的用户，并计算分红权
+            foreach ($users as $user) {
+
+                if (!self::isCommonpathNum3($user->id)) continue;
+
+                //计算分红权，向下取整
+                $dividend_right = floor($user->amount2 / 100);
+
+                //登记用户
+                $arr[] = ['uid' => $user->id, 'dividend_right' => $dividend_right];
+
+            }
+
+        }
+
+        return $arr;
     }
 
 }

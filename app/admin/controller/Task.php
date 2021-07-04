@@ -120,6 +120,43 @@ class Task extends AdminController
         //取得相关配置
         $config = sysconfig('other');
 
+        //计算今日待分红金额
+        $award = Pool::getAmount() * floatval($config['fh_sxf_bl']) / 100;
+
+        //如果今日已分红，不在继续
+        if (!Pool::isReward()) return 'already';
+
+        //获取分红统计
+        $data = Users::dividends_statistics();
+
+        //满足条件的人员为空
+        if (empty($data)) return '今日分红人数：0人';
+
+        //分红人员组
+        $uids = array_column($data, 'uid');
+
+        //总分红权
+        $all_dividend_right = array_sum(array_column($data, 'dividend_right'));
+
+        //计算单份分红权的金额
+        $amount = $award / $all_dividend_right;
+
+        foreach ($data as $v) {
+
+            //实际分红金额
+            $real_amount = $amount * $v['dividend_right'];
+
+            //资金入账
+            Users::changeAmount($v['uid'], 2, $real_amount);
+
+            //插入资金日志
+            MoneyLog::addLog($v['uid'],0, $real_amount,8, 0);
+
+            //每成功分红一个人，资金池对应产生消耗
+            Pool::decPool($real_amount);
+
+        }
+
         return 'success';
     }
 }
