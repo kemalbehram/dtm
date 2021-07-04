@@ -201,20 +201,21 @@
             <div class="layui-form-mid">%买卖手续费，每日凌晨分红</div>
         </div>
     </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-form-mid">下面有三人排队了、并且自己DTM余额不低于</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="fh_ye_min" value="{:sysconfig('other','fh_ye_min')}" placeholder="请输入比例" class="layui-input">
+                </div>
+                <div class="layui-form-mid">时才可参与分红</div>
+            </div>
+        </div>
     <div class="layui-form-item">
         <div class="layui-inline">
             <div class="layui-form-mid">分红时按100的倍数获得一个分红权，比如：200就占2个分红权，以此类推，最后算下总共多少个分红权力，然后每个权力多少钱，派发</div>
         </div>
     </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <div class="layui-form-mid">下面有三人排队了、并且自己DTM余额不低于</div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="fh_ye_min" value="{:sysconfig('other','fh_ye_min')}" placeholder="请输入比例" class="layui-input">
-            </div>
-            <div class="layui-form-mid">时才可参与分红</div>
-        </div>
-    </div>
+
 
     <div class="layui-form-item">
         <tip style="font-size: 15px;color: red;font-weight:bold;">其他</tip>
