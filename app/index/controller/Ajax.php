@@ -71,6 +71,9 @@ class Ajax extends AdminController
             //邀请链接
             $user->invite_url = request()->domain().'/?ref='.$user->address;
 
+            //是否累计充值60U+
+            $user->isRecharge60 = ($user->all_recharge < 60) ? false : true;
+
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);
         }
@@ -78,7 +81,7 @@ class Ajax extends AdminController
         return json(['code' => 1, 'msg' => '获取成功', 'data' => $user]);
     }
 
-    //推广收益提现
+    //USDT提现
     public function withdraw()
     {
         $get = $this->request->param();
@@ -87,20 +90,20 @@ class Ajax extends AdminController
         ];
         $this->validate($get, $rule);
 
-        $user = Users::where('address', $get['address'])->field('id,address,amount3')->find();
+        $user = Users::where('address', $get['address'])->field('id,address,amount1')->find();
         if (empty($user)) {
-            $this->error('钱包地址不存在');
+            $this->error('请连接钱包');
         }
-        if ($user->amount3 == 0) {
-            $this->error('奖金账户余额不足');
+        if ($user->amount1 <= 0) {
+            $this->error('USDT余额不足');
         }
         Db::startTrans();
         try {
             $result = Withdraw::create([
                'uid'            =>  $user->id,
-               'amount'         =>  $user->amount3,
-               'fee'            =>  $user->amount3 * sysconfig('other','withdraw_fee') / 100,
-               'real_amount'    =>  $user->amount3 * (1 - sysconfig('other','withdraw_fee') / 100),
+               'amount'         =>  $user->amount1,
+               'fee'            =>  $user->amount1 * sysconfig('other','withdraw_fee') / 100,
+               'real_amount'    =>  $user->amount1 * (1 - sysconfig('other','withdraw_fee') / 100),
             ]);
 
             $user->amount3 = 0;
