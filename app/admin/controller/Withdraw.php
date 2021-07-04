@@ -118,9 +118,6 @@ class Withdraw extends AdminController
             $data->content = '通过';
             $data->save();
 
-            //提现手续费打入资金池
-            Pool::addPool($data->fee);
-
             $this->model->commit();
         }catch (\Exception $e) {
             $this->model->rollback();
@@ -145,7 +142,7 @@ class Withdraw extends AdminController
             $data->save();
 
             Users::where('id', $data->uid)->update([
-               'amount3' =>  Db::raw('amount3+'.($data->amount + $data->fee)),
+               'amount1' =>  Db::raw('amount1+'.($data->amount + $data->fee)),
             ]);
 
             MoneyLog::addLog($data->uid, 0, $data->amount + $data->fee, 2, $id);
