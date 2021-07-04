@@ -28,7 +28,6 @@ function getAddress() {
             window.ethereum.enable();
         } catch (error) {
             layer.msg('请接受钱包授权', {icon:2, skin:'white'}, function () {});
-            return false;
         }
 
     }
