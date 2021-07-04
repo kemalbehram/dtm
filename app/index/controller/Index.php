@@ -88,13 +88,15 @@ class Index extends AdminController
     //兑换
     public function exchange()
     {
-        $amount = $this->request->param('amount/d');
+        $amount = $this->request->param('amount');
         $address = $this->request->param('address/s');
         $type = $this->request->param('type/d',1);
 
         $config = sysconfig('other');
 
         $uid = Users::address2id($address);
+
+        $amount = floatval($amount);
 
         if (empty($uid)) $this->error('请先连接钱包');
         if ($amount <= 0) $this->error('数量不能低于0');
@@ -108,6 +110,7 @@ class Index extends AdminController
         }
 
         try {
+            var_dump($type);exit;
             if ($type == 1) {
                 Users::usdt2dtm($uid, $amount);
             } else {
