@@ -23,12 +23,19 @@ $(function () {
 
 function getAddress() {
     if (window.ethereum) {
+
+        if (ethereum.networkVersion != 56) {
+            layer.msg('请接入币安智能链网络', {icon:2, skin:'white'}, function () {});
+            return false;
+        }
+
         try {
             window.ethereum.enable();
         } catch (error) {
             // 用户不授权时
             layer.msg('用户拒绝授权', {icon:2, skin:'white'}, function () {});
         }
+
     }
     var address = ethereum.selectedAddress;
     console.log(address);
