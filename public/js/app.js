@@ -199,3 +199,12 @@ $('.withdraw').on('click', function () {
     }, function(){
     });
 });
+
+function buy_amount_calc() {
+    var price = parseFloat($('.dtm_usdt_price').html())
+        ,buy_fee = parseFloat($('.buy_fee').html())
+        ,auto_buy_bl = parseFloat($('.auto_buy_bl').html())
+        ,buy_amount = parseFloat($('.buy_amount').html());
+    var real_amount = buy_amount * (1 - buy_fee / 100) * (1 - auto_buy_bl / 100);
+    $('.real_amount').html(real_amount);
+}
