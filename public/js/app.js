@@ -66,6 +66,14 @@ function getUserInfo() {
                     $('.all_recharge').html(res.data.all_recharge);
                     $('.all_withdraw').html(res.data.all_withdraw);
                     $('.invite_url').val(res.data.invite_url);
+
+                    //推广链接是否显示
+                    if (res.data.isRecharge60) {
+                        $('.invite').show();
+                    } else {
+                        $('.invite').hide();
+                    }
+
                 }catch (e) {}
             }
         },

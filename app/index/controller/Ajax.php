@@ -37,6 +37,8 @@ class Ajax extends AdminController
         $this->validate($get, $rule, $message);
 
         try {
+            $config = sysconfig('other');
+
             $user = Users::where('address', $get['address'])->find();
             if (empty($user)) {
                 $faddress = cookie('ref');
@@ -65,7 +67,7 @@ class Ajax extends AdminController
             $user->invite_url = request()->domain().'/?ref='.$user->address;
 
             //是否累计充值60U+
-            $user->isRecharge60 = (Recharge::getAllRecharge($user->id) < 60) ? false : true;
+            $user->isRecharge60 = (Recharge::getAllRecharge($user->id) < $config['tg_recharge']) ? false : true;
 
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);
