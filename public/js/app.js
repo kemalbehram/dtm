@@ -57,15 +57,12 @@ function getUserInfo() {
                     //渲染可选数据
                     $('.amount1').html(res.data.amount1);
                     $('.amount2').html(res.data.amount2);
-                    $('.amount3').html(res.data.amount3);
-                    $('.static_award').html(res.data.static_award);
-                    $('.direct_award').html(res.data.direct_award);
-                    $('.manage_award').html(res.data.manage_award);
+                    $('.zy_award').html(res.data.zy_award);
+                    $('.tj_award').html(res.data.tj_award);
+                    $('.sy_award').html(res.data.sy_award);
+                    $('.fh_award').html(res.data.fh_award);
                     $('.all_award').html(res.data.all_award);
-                    $('.quota').html(res.data.quota);
                     $('.share_num').html(res.data.share_num);
-                    $('.team_num').html(res.data.team_num);
-                    $('.team_order_amount').html('A线：' + res.data.a_performance + '，B线：' + res.data.b_performance);
                     $('.invite_url').val(res.data.invite_url);
                 }catch (e) {}
             }
@@ -118,12 +115,12 @@ function start() {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
     }
-    if (empty(amount)) {
-        layer.msg('请输入投资数量', {icon:2, skin:'white'}, function () {});
+    if (empty(type)) {
+        layer.msg('请选择质押期限', {icon:2, skin:'white'}, function () {});
         return;
     }
-    if (empty(type)) {
-        layer.msg('请选择付款账户', {icon:2, skin:'white'}, function () {});
+    if (empty(amount)) {
+        layer.msg('请输入质押数量', {icon:2, skin:'white'}, function () {});
         return;
     }
     $.ajax({
