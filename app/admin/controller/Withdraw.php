@@ -90,6 +90,7 @@ class Withdraw extends AdminController
                 ->select();
             foreach ($list as &$v) {
                 $v['address'] = Users::id2address($v->uid);
+                $v['real_amount'] = $v->amount - $v->fee;
             }
             $data = [
                 'code'  => 0,
