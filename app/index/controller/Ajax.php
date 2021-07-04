@@ -106,11 +106,13 @@ class Ajax extends AdminController
         }
         Db::startTrans();
         try {
+            $config = sysconfig('other');
+
             $result = Withdraw::create([
                'uid'            =>  $user->id,
                'amount'         =>  $user->amount1,
-               'fee'            =>  $user->amount1 * sysconfig('other','withdraw_fee') / 100,
-               'real_amount'    =>  $user->amount1 * (1 - sysconfig('other','withdraw_fee') / 100),
+               'fee'            =>  $user->amount1 * $config['withdraw_fee'] / 100,
+               'real_amount'    =>  $user->amount1 * (1 - $config['withdraw_fee'] / 100),
             ]);
 
             $user->amount1 = 0;
