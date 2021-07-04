@@ -251,7 +251,7 @@ class Users extends TimeModel
             //计算获得USDT数量
             $usdt_amount = $amount * floatval($config['dtm_usdt_price']);
 
-            if ($usdt_amount <=0 ) throw new Exception('数量计算出错');
+            if ($usdt_amount <= 0 ) throw new Exception('数量计算出错');
 
             //卖出要扣1%或者50% 手续费，扣1%，需要下面有三个会员（可以是上级给他安排，也可以是自己直推）。扣50%是下面没有三个人排队。
             $sell_fee = self::getSellFee($uid) * $usdt_amount / 100;
@@ -261,6 +261,8 @@ class Users extends TimeModel
 
             //USDT到账
             $user->amount1 += $real_amount;
+            //扣除DTM
+            $user->amount2 -= $amount;
             $user->save();
             //手续费资金池到账，换算成DTM
             Pool::addPool($sell_fee / floatval($config['dtm_usdt_price']));
