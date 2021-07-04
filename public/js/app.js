@@ -22,10 +22,7 @@ $(function () {
 });
 
 function getAddress() {
-    var now_address;
-    var web3Provider;
     if (window.ethereum) {
-        web3Provider = window.ethereum;
         try {
             window.ethereum.enable();
         } catch (error) {
@@ -33,17 +30,9 @@ function getAddress() {
             layer.msg('用户拒绝授权', {icon:2, skin:'white'}, function () {});
         }
     }
-    web3js = new Web3(web3Provider);
-    web3js.eth.getAccounts(function (error, result) {
-        if (!error) now_address =  result;
-    });
-
-    if (now_address) {
-        console.log(now_address);
-        return now_address;
-    }
-
-    return;
+    var address = ethereum.selectedAddress;
+    console.log(address);
+    return address;
 }
 
 function getUserInfo() {
