@@ -195,6 +195,8 @@ class Users extends TimeModel
             //DTM到账
             $user->amount2 += $real_amount;
             $user->save();
+            //手续费资金池到账
+            Pool::addPool($buy_fee);
 
             //每次兑换后DTM价格涨一点
             $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
@@ -229,26 +231,41 @@ class Users extends TimeModel
             }
 
             //计算获得USDT数量
-            $dtm_amount = $amount * floatval($config['dtm_usdt_price']);
+            $usdt_amount = $amount * floatval($config['dtm_usdt_price']);
 
-            //买入扣10%手续费剩下的90%，再拿50%自动购买7天的质押，剩下的才是实际到账的。
-            //兑换DTM手续费
-            $buy_fee = $dtm_amount * floatval($config['buy_fee']) / 100;
-            //质押金额
-            $zy_amount = ($dtm_amount - $buy_fee) * floatval($config['auto_buy_bl']) / 100;
+            if ($usdt_amount <=0 ) throw new Exception('数量计算出错');
+
+            //卖出要扣1%或者50% 手续费，扣1%，需要下面有三个会员（可以是上级给他安排，也可以是自己直推）。扣50%是下面没有三个人排队。
+            //默认手续费50%
+            $sell_fee = $usdt_amount * floatval($config['sell_fee2']) / 100;
+
+            //下面有三个会员手续费1%
+            if (self::isCommonpathNum3($uid)) {
+                $sell_fee = $usdt_amount * floatval($config['sell_fee1']) / 100;
+            }
+
             //实际到账
-            $real_amount = $dtm_amount - $buy_fee - $zy_amount;
+            $real_amount = $usdt_amount - $sell_fee;
 
-            //开始质押
-            Orders::fund($uid, 7, $zy_amount);
-            //DTM到账
-            $user->amount2 += $real_amount;
+            //USDT到账
+            $user->amount1 += $real_amount;
             $user->save();
+            //手续费资金池到账
+            Pool::addPool($sell_fee);
+
+            //每次兑换后DTM价格跌一点，受地板价限制
+            //计算减少金额
+            $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
+
+            //如果减少后还是高于地板价才能继续
+            if (floatval($config['dtm_usdt_price']) - $num >= $config['min_dtm_usdt_price']) {
+                SystemConfig::where('name', 'dtm_usdt_price')->dec('value', $num);
+                TriggerService::updateSysconfig();
+            }
 
             //资金日志
-            MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
-            MoneyLog::addLog($uid, 1, $zy_amount, 12, 0);
-            MoneyLog::addLog($uid, 0, $real_amount, 13, 0);
+            MoneyLog::addLog($uid, 1, $sell_fee, 14, 0);
+            MoneyLog::addLog($uid, 0, $real_amount, 15, 0);
 
             Db::commit();
         } catch (\Exception $e) {

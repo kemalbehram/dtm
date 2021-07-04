@@ -54,6 +54,8 @@ class TimeModel extends Model
         11 =>  'USDT兑DTM手续费',
         12 =>  'USDT兑DTM自动质押',
         13 =>  'USDT兑DTM',
+        14 =>  'DTM兑USDT手续费',
+        15 =>  'DTM兑USDT',
     ];
 
 }
