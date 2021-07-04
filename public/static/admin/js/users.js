@@ -24,7 +24,6 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'address', title: '钱包地址'},
                     {field: 'amount1', title: 'USDT账户', search: false},
                     {field: 'amount2', title: 'DTM账户', search: false},
-                    {field: 'fl_time', title: '上次返利时间', search: false},
                     {field: 'create_time', title: '注册时间', search: 'range'},
                     {
                         width: 120,
