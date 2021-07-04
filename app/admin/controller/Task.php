@@ -121,7 +121,7 @@ class Task extends AdminController
         $award = Pool::getAmount() * floatval($config['fh_sxf_bl']) / 100;
 
         //如果今日已分红，不在继续
-        if (!Pool::isReward()) return 'already';
+//        if (!Pool::isReward()) return 'already';
 
         //获取分红统计
         $data = Users::dividends_statistics();
