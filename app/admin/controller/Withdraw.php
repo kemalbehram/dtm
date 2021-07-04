@@ -145,7 +145,7 @@ class Withdraw extends AdminController
                'amount1' =>  Db::raw('amount1+'.($data->amount + $data->fee)),
             ]);
 
-            MoneyLog::addLog($data->uid, 0, $data->amount + $data->fee, 2, $id);
+            MoneyLog::addLog($data->uid, 0, $data->amount + $data->fee, 7, $id);
 
             $this->model->commit();
         }catch (\Exception $e) {
