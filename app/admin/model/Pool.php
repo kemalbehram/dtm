@@ -21,27 +21,8 @@ class Pool extends TimeModel
 
     //资金池消耗
     public static function decPool($amount) {
+        if (self::getAmount() < $amount) return false;
         return self::where('name', 'pool')->dec('amount', $amount)->update();
-    }
-
-    //获取今日已分红人数
-    public static function getNum()
-    {
-        return self::where('name', 'pool')->value('num');
-    }
-
-    //新增分红人数
-    public static function addNum()
-    {
-        return self::where('name', 'pool')->inc('num')->update();
-    }
-
-    //清空分红人数
-    public static function clearNum()
-    {
-        return self::where('name', 'pool')->update([
-            'num'   =>  0,
-        ]);
     }
 
     //查询今日是否分红过
