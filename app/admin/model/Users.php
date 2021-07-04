@@ -195,6 +195,10 @@ class Users extends TimeModel
             $user->amount2 += $real_amount;
             $user->save();
 
+            //每次兑换后DTM价格涨一点
+            $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
+            SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num);
+
             //资金日志
             MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
             MoneyLog::addLog($uid, 1, $zy_amount, 12, 0);

@@ -34,30 +34,11 @@ class Config extends AdminController
     }
 
     /**
-     * @NodeAnotation(title="保存")
+     * @NodeAnotation(title="保存alphaNum")
      */
     public function save()
     {
         $post = $this->request->post();
-        $rule = [
-            'address1|1日地址'     => 'alphaNum',
-            'address5|5日地址'     => 'alphaNum',
-            'address10|10日地址'   => 'alphaNum',
-            'address15|15日地址'   => 'alphaNum',
-            'address20|20日地址'   => 'alphaNum',
-            'income1|1日收益'      => 'float',
-            'income5|5日收益'      => 'float',
-            'income10|10日收益'    => 'float',
-            'income15|15日收益'    => 'float',
-            'income20|20日收益'    => 'float',
-            'dynamic1|1代'         => 'float',
-            'dynamic5|2代'         => 'float',
-            'dynamic10|3代'        => 'float',
-            'dynamic15|4-10代'     => 'float',
-            'dynamic20|11-20代'    => 'float',
-        ];
-        $this->validate($post, $rule);
-
         try {
             foreach ($post as $key => $val) {
                 $this->model
