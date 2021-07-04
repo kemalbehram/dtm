@@ -26,6 +26,8 @@ return [
             'serialize'  => ['serialize', 'unserialize'],
             //密码
             'password'  =>  '123654',
+            // 选择redis数据库
+            'select'    => 6,
         ],
         'file' => [
             // 驱动方式
