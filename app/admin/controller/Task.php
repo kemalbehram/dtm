@@ -132,9 +132,6 @@ class Task extends AdminController
         //满足条件的人员为空
         if (empty($data)) return '今日分红人数：0人';
 
-        //分红人员组
-        $uids = array_column($data, 'uid');
-
         //总分红权
         $all_dividend_right = array_sum(array_column($data, 'dividend_right'));
 
