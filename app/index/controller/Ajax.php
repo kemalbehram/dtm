@@ -70,7 +70,13 @@ class Ajax extends AdminController
             $user->isRecharge60 = (Recharge::getAllRecharge($user->id) < $config['tg_recharge']) ? false : true;
 
             //USDT兑换DTM手续费
-            $user->buy_fee = floatval($config['buy_fee']);
+            $user->buy_fee = (float)$config['buy_fee'];
+
+            //自动质押比例
+            $user->auto_buy_bl = (float)$config['auto_buy_bl'];
+
+            //DTM/USDT价格
+            $user->dtm_usdt_price = (float)$config['dtm_usdt_price'];
 
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);
