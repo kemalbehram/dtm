@@ -4,11 +4,16 @@ $(function () {
     });
 
     $('.js-model').on('click', function () {
-        // let address = getAddress();
-        // if (empty(address)) {
-        //     layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
-        //     return;
-        // }
+        try {
+            var address = getAddress();
+        }catch (e) {
+            layer.msg(e, {icon:2, skin:'white'}, function () {});
+            return;
+        }
+        if (empty(address)) {
+            layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+            return;
+        }
 
         var id = $(this).data('id');
         $('#' + id).fadeIn();
@@ -26,8 +31,8 @@ function getAddress() {
 
         try {
             window.ethereum.enable();
-        } catch (error) {
-            layer.msg('请接受钱包授权', {icon:2, skin:'white'}, function () {});
+        } catch (e) {
+            throw '请接受钱包授权';
         }
 
     }
@@ -36,7 +41,13 @@ function getAddress() {
 }
 
 function getUserInfo() {
-    let address = getAddress();
+    try {
+        var address = getAddress();
+    }catch (e) {
+        layer.msg(e, {icon:2, skin:'white'}, function () {});
+        return;
+    }
+
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -78,7 +89,12 @@ function getUserInfo() {
 }
 
 function get_order() {
-    let address = getAddress();
+    try {
+        var address = getAddress();
+    }catch (e) {
+        layer.msg(e, {icon:2, skin:'white'}, function () {});
+        return;
+    }
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -114,7 +130,12 @@ $(window).scroll(function () {
 function start() {
     let type = $('#type').val();
     let amount = $('#amount').val();
-    let address = getAddress();
+    try {
+        var address = getAddress();
+    }catch (e) {
+        layer.msg(e, {icon:2, skin:'white'}, function () {});
+        return;
+    }
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -148,7 +169,12 @@ function start() {
 }
 
 function get_money_log() {
-    let address = getAddress();
+    try {
+        var address = getAddress();
+    }catch (e) {
+        layer.msg(e, {icon:2, skin:'white'}, function () {});
+        return;
+    }
     if (empty(address)) {
         return;
     }
@@ -177,7 +203,12 @@ $('.withdraw').on('click', function () {
     layer.confirm('确定提现全部USDT？', {
         btn: ['确定','取消']
     }, function(){
-        let address = getAddress();
+        try {
+            var address = getAddress();
+        }catch (e) {
+            layer.msg(e, {icon:2, skin:'white'}, function () {});
+            return;
+        }
         if (empty(address)) {
             layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
             return;
