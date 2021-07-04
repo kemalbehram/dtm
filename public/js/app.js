@@ -211,26 +211,21 @@ function buy_amount_calc() {
 }
 
 function buy() {
-    let type = $('#type').val();
-    let amount = $('#amount').val();
+    let amount = parseFloat($('#buy_amount').val());
     let address = getAddress();
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
     }
-    if (empty(type)) {
-        layer.msg('请选择质押期限', {icon:2, skin:'white'}, function () {});
-        return;
-    }
     if (empty(amount)) {
-        layer.msg('请输入质押数量', {icon:2, skin:'white'}, function () {});
+        layer.msg('请输入兑换数量', {icon:2, skin:'white'}, function () {});
         return;
     }
     $.ajax({
         url: '/exchange',
         type: 'POST',
         dataType: 'json',
-        data: {type: type, amount: amount, address: address},
+        data: {type: 1, amount: amount, address: address},
         success: function (res) {
             console.log(res);
             if (res.code == 1){
