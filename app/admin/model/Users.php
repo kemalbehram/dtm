@@ -200,7 +200,9 @@ class Users extends TimeModel
 
             //每次兑换后DTM价格涨一点
             $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
+            //变更价格
             SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num)->update();
+            //刷新配置缓存
             TriggerService::updateSysconfig();
 
             //资金日志
@@ -250,8 +252,8 @@ class Users extends TimeModel
             //USDT到账
             $user->amount1 += $real_amount;
             $user->save();
-            //手续费资金池到账
-            Pool::addPool($sell_fee);
+            //手续费资金池到账，换算成DTM
+            Pool::addPool($sell_fee / floatval($config['dtm_usdt_price']));
 
             //每次兑换后DTM价格跌一点，受地板价限制
             //计算减少金额
@@ -259,8 +261,12 @@ class Users extends TimeModel
 
             //如果减少后还是高于地板价才能继续
             if (floatval($config['dtm_usdt_price']) - $num >= $config['min_dtm_usdt_price']) {
+
+                //变更价格
                 SystemConfig::where('name', 'dtm_usdt_price')->dec('value', $num)->update();
+                //刷新配置缓存
                 TriggerService::updateSysconfig();
+
             }
 
             //资金日志
@@ -277,6 +283,7 @@ class Users extends TimeModel
     //分红统计
     public static function dividends_statistics()
     {
+        //满足条件的用户集合
         $arr = [];
 
         $config = sysconfig('other');
