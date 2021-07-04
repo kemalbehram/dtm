@@ -16,10 +16,14 @@ $(function () {
 });
 
 function getAddress() {
-    if (window.ethereum) {
-        window.ethereum.enable();
+    try {
+        if (window.ethereum) {
+            window.ethereum.enable();
+        }
+        return window.ethereum.selectedAddress;
+    } catch (e) {
+        return '';
     }
-    return window.ethereum.selectedAddress;
 }
 
 function getUserInfo() {
