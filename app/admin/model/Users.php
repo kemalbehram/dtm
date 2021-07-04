@@ -32,7 +32,7 @@ class Users extends TimeModel
             //注册关系处理
             Regpath::addRegpath($result->id, $fid);
 
-            $user = self::field('id,address,account1,account2')->find($result->id);
+            $user = self::field('id,address,amount1,amount2')->find($result->id);
 
             Db::commit();
         } catch (\Exception $e) {
