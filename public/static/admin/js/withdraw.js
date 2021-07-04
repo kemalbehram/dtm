@@ -20,7 +20,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {type: 'checkbox'},
                     {field: 'id', title: 'ID', hide: true, search: false},
                     {field: 'address', title: '地址', width: 340},
-                    {field: 'amount', title: '申请金额'},
+                    {field: 'amount', title: '申请金额(BUSD)'},
                     {field: 'fee', title: '手续费'},
                     {field: 'real_amount', title: '实际到账'},
                     {field: 'status', search: 'select', selectList: ["待审核","已审核"], title: '状态', templet: function (d){
@@ -75,7 +75,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {type: 'checkbox'},
                     {field: 'id', title: 'ID', hide: true, search: false},
                     {field: 'address', title: '地址', width: 340},
-                    {field: 'amount', title: '申请金额'},
+                    {field: 'amount', title: '申请金额(BUSD)'},
                     {field: 'fee', title: '手续费'},
                     {field: 'real_amount', title: '实际到账'},
                     {field: 'status', search: 'select', selectList: ["待审核","已审核"], title: '状态', templet: function (d){
