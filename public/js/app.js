@@ -19,7 +19,7 @@ function getAddress() {
     if (window.ethereum) {
         window.ethereum.enable();
     }
-    return ethereum.selectedAddress;
+    return ethereum.selectedAddress || '';
 }
 
 function getUserInfo() {
