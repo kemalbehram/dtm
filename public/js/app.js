@@ -63,6 +63,8 @@ function getUserInfo() {
                     $('.fh_award').html(res.data.fh_award);
                     $('.all_award').html(res.data.all_award);
                     $('.share_num').html(res.data.share_num);
+                    $('.all_recharge').html(res.data.all_recharge);
+                    $('.all_withdraw').html(res.data.all_withdraw);
                     $('.invite_url').val(res.data.invite_url);
                 }catch (e) {}
             }

@@ -5,6 +5,7 @@ namespace app\index\controller;
 use app\admin\model\Commonpath;
 use app\admin\model\MoneyLog;
 use app\admin\model\Orders;
+use app\admin\model\Recharge;
 use app\admin\model\Regpath;
 use app\admin\model\SystemUploadfile;
 use app\admin\model\Withdraw;
@@ -53,6 +54,10 @@ class Ajax extends AdminController
             $user->fh_award = $award['fh_award'];
             $user->all_award = $award['all_award'];
 
+            //累计充值、累计提现
+            $user->all_recharge = Recharge::getAllRecharge($user->id);
+            $user->all_withdraw = Withdraw::getAllWithdraw($user->id);
+
             //推广人数
             $user->share_num = Regpath::where(['uid' => $user->id, 'level' => 1])->count();
 
@@ -60,7 +65,7 @@ class Ajax extends AdminController
             $user->invite_url = request()->domain().'/?ref='.$user->address;
 
             //是否累计充值60U+
-            $user->isRecharge60 = ($user->all_recharge < 60) ? false : true;
+            $user->isRecharge60 = (Recharge::getAllRecharge($user->id) < 60) ? false : true;
 
         } catch (\Exception $e) {
             return json(['code' => 0, 'msg' => '获取失败：'.$e->getMessage()]);

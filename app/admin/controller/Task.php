@@ -67,9 +67,6 @@ class Task extends AdminController
                 //资金入账
                 $user->amount1 += $v->amount;
 
-                //累加 用户累计充值金额
-                $user->all_recharge += $v->amount;
-
                 //提交数据
                 $user->save();
 

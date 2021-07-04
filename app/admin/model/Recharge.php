@@ -27,6 +27,12 @@ class Recharge extends TimeModel
         return date('Y-m-d H:i:s', $value);
     }
 
+    //获取累计充值
+    public static function getAllRecharge($uid)
+    {
+        return MoneyLog::where(['mtype' => 5, 'uid' => $uid])->sum('amount') ?? 0;
+    }
+
     //充值排位
     public static function rechargeAddCommonpath(int $uid)
     {
