@@ -26,7 +26,6 @@ function getAddress() {
 
         if (ethereum.networkVersion != 56) {
             layer.msg('请切换为币安智能链网络', {icon:2, skin:'white'}, function () {});
-            return false;
         }
 
         try {
