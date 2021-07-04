@@ -180,7 +180,7 @@ class Users extends TimeModel
             //计算获得DTM数量
             $dtm_amount = $amount / floatval($config['dtm_usdt_price']);
 
-            if ($dtm_amount <=0 ) throw new Exception('数量计算出错');
+            if ($dtm_amount <= 0 ) throw new Exception('数量计算出错');
 
             //买入扣10%手续费剩下的90%，再拿50%自动购买7天的质押，剩下的才是实际到账的。
             //兑换DTM手续费
