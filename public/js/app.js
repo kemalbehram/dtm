@@ -56,6 +56,7 @@ function getUserInfo() {
                     }
 
                     $('.buy_fee').html(res.data.buy_fee);
+                    $('.auto_buy_bl').html(res.data.auto_buy_bl);
                     $('.dtm_usdt_price').html(res.data.dtm_usdt_price);
 
                 }catch (e) {}
