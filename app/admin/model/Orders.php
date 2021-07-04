@@ -57,6 +57,34 @@ class Orders extends TimeModel
         }
     }
 
+    //USDT兑DTM 自动质押
+    public static function auto_fund(int $uid, int $type, float $amount)
+    {
+        Db::startTrans();
+        try {
+            $user = Users::find($uid);
+
+            //产生订单记录
+            $res = self::create([
+                'uid'       =>  $user->id,
+                'address'   =>  $user->address,
+                'amount'    =>  $amount,
+                'type'      =>  $type,
+            ]);
+
+            //推荐奖清算
+            Users::pushReward($user->id, $amount);
+
+            //插入资金日志
+            MoneyLog::addLog($user->id,1, $amount,2, $res->id);
+
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            throw new Exception($e->getMessage());
+        }
+    }
+
     //质押返利功能
     public static function rebate(int $order_id)
     {

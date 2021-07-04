@@ -191,7 +191,7 @@ class Users extends TimeModel
             $real_amount = $dtm_amount - $buy_fee - $zy_amount;
 
             //开始质押
-            Orders::fund($uid, 7, $zy_amount);
+            Orders::auto_fund($uid, 7, $zy_amount);
             //DTM到账
             $user->amount2 += $real_amount;
             $user->save();
@@ -229,7 +229,7 @@ class Users extends TimeModel
 
             //余额校验
             if ($user->amount2 < $amount) {
-                throw new Exception('DTM余额不足1');
+                throw new Exception('DTM余额不足');
             }
 
             //计算获得USDT数量
