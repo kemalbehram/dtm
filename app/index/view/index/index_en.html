@@ -6,7 +6,7 @@
     <title>{:sysconfig('site', 'site_name')}</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v={:time()}">
     <link rel="stylesheet" href="/layui/css/layui.css">
     <script>
         (function (doc, win) {
@@ -41,34 +41,26 @@
 <div class="container">
     <ul class="my-total clearfix user_info" style="margin: 2rem 0 1rem;">
         <li>
-            <div class="label">可用账户</div>
+            <div class="label">USDT账户</div>
             <div class="value amount1">--</div>
         </li>
         <li>
-            <div class="label">不可用账户</div>
+            <div class="label">DTM账户</div>
             <div class="value amount2">--</div>
-        </li>
-        <li>
-            <div class="label">奖金账户</div>
-            <div class="value amount3">--</div>
-        </li>
-        <li>
-            <div class="label">额度</div>
-            <div class="value quota">--</div>
         </li>
     </ul>
 
     <ul class="home-list">
         <li>
-            <div class="title"><span class="js-model" data-id="ljtz">立即投入</span>AUK投资返利</div>
+            <div class="title"><span class="js-model" data-id="ljtz">立即质押</span>DTM质押返利</div>
             <div class="info">
                 <div class="item">
-                    <span class="red">{:sysconfig('other', 'release_ratio')}%</span>
-                    <strong>每日返还</strong>
+                    <span class="red">{:sysconfig('other','zy1_lx')} - {:sysconfig('other','zy30_lx')}%</span>
+                    <strong>质押利息</strong>
                 </div>
                 <div class="item">
-                    <span>100USDT</span>
-                    <strong>最小起投金额</strong>
+                    <span>{:sysconfig('other','zy_min')} DTM</span>
+                    <strong>最低质押数量</strong>
                 </div>
             </div>
         </li>
@@ -77,19 +69,23 @@
     <div class="page-title"><span>收益统计</span></div>
     <ul class="my-user award" style="margin-bottom: .53333rem;">
         <li>
-            <div class="label">静态奖累计收益</div>
-            <div class="value static_award">--</div>
+            <div class="label">累计质押收益</div>
+            <div class="value zy_award">--</div>
         </li>
         <li>
-            <div class="label">直推奖累计收益</div>
-            <div class="value direct_award">--</div>
+            <div class="label">累计推荐奖</div>
+            <div class="value tj_award">--</div>
         </li>
         <li>
-            <div class="label">管理奖累计收益</div>
-            <div class="value manage_award">--</div>
+            <div class="label">累计收益奖</div>
+            <div class="value sy_award">--</div>
         </li>
         <li>
-            <div class="label">累计收益</div>
+            <div class="label">累计分红</div>
+            <div class="value fh_award">--</div>
+        </li>
+        <li>
+            <div class="label">全部收益</div>
             <div class="value all_award">--</div>
         </li>
     </ul>
@@ -98,10 +94,19 @@
 <div class="model-container" id="ljtz">
     <div class="overlay"></div>
     <div class="wrap">
-        <div class="title"><a href="javascript:;" class="close">取消</a>投资数量</div>
+        <div class="title"><a href="javascript:;" class="close">取消</a>质押数量</div>
+        <div style="height: 50px">
+            <label><span>选择质押期限</span></label>
+            <select name="type" id="type" style="height: 30px;">
+                <option value="1">1天，利息：{:sysconfig('other','zy1_lx')}%，到期还本</option>
+                <option value="7">7天，利息：{:sysconfig('other','zy7_lx')}%，到期还本</option>
+                <option value="15">15天，利息：{:sysconfig('other','zy15_lx')}%，到期还本</option>
+                <option value="30">30天，利息：{:sysconfig('other','zy30_lx')}%，到期还本</option>
+            </select>
+        </div>
         <div class="input">
-            <label><input type="text" placeholder="请输入要投入的USDT数量" id="amount"></label>
-            <span>USDT</span>
+            <label><input type="text" placeholder="请输入要质押的DTM数量" id="amount"></label>
+            <span>DTM</span>
         </div>
         <button class="submit" onclick="start();">提交</button>
     </div>
