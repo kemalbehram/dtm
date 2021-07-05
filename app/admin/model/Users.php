@@ -194,7 +194,7 @@ class Users extends TimeModel
 
             //余额校验
             if ($user->amount1 < $amount) {
-                throw new Exception('USDT余额不足');
+                throw new Exception('BUSD余额不足');
             }
 
             //计算获得DTM数量
