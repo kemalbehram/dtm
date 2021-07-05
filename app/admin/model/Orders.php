@@ -23,7 +23,15 @@ class Orders extends TimeModel
         return self::whereIn('uid', $uids)->sum('amount');
     }
 
-    //质押投资
+    //根据质押天数获取利息比例
+    public static function getRatio(int $type)
+    {
+        $config = sysconfig('other');
+
+        return $config['zy'.$type.'_lx'] ?? 0;
+    }
+
+    //质押DTM
     public static function fund(int $uid, int $type, float $amount)
     {
         Db::startTrans();
@@ -42,6 +50,7 @@ class Orders extends TimeModel
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
                 'type'      =>  $type,
+                'ratio'     =>  self::getRatio($type),
             ]);
 
             //推荐奖清算
@@ -70,6 +79,7 @@ class Orders extends TimeModel
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
                 'type'      =>  $type,
+                'ratio'     =>  self::getRatio($type),
                 'auto'      =>  1,
             ]);
 
@@ -98,8 +108,8 @@ class Orders extends TimeModel
         //如果返利已经完成 或 状态不正确
         if (($order->finish >= $order->type) || $order->status <> 0) return false;
 
-        //计算平均利息
-        $average_lx = self::calc_lx($order);
+        //计算日平均利息
+        $average_lx = round($order['amount'] * $order['ratio'] / 100 / $order['type'],4);
 
         if (empty($average_lx)) return false;
 
@@ -148,44 +158,6 @@ class Orders extends TimeModel
             return false;
         }
         return true;
-    }
-
-    //平均利息计算
-    public static function calc_lx($order)
-    {
-        $config = sysconfig('other');
-
-        if ($order['type'] == 1) {
-
-            //计算总利息
-            $all_lx = $order['amount'] * (float)$config['zy1_lx'] / 100;
-            //1天形式的，平均利息和总利息相等
-            $average_lx = $all_lx;
-
-        } else if ($order['type'] == 7) {
-
-            //计算总利息
-            $all_lx = $order['amount'] * (float)$config['zy7_lx'] / 100;
-            //计算平均利息
-            $average_lx = round($all_lx / 7, 4);
-
-        } else if ($order['type'] == 15) {
-
-            //计算总利息
-            $all_lx = $order['amount'] * (float)$config['zy15_lx'] / 100;
-            //计算平均利息
-            $average_lx = round($all_lx / 15, 4);
-
-        } else if ($order['type'] == 30) {
-
-            //计算总利息
-            $all_lx = $order['amount'] * (float)$config['zy30_lx'] / 100;
-            //计算平均利息
-            $average_lx = round($all_lx / 30, 4);
-
-        }
-
-        return $average_lx;
     }
 
     //订单提前解押
