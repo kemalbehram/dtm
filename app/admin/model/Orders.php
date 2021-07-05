@@ -105,12 +105,13 @@ class Orders extends TimeModel
         //如果订单不存在
         if (empty($order)) return false;
 
-        //如果返利已经完成 或 状态不正确
+        //如果订单已完结 或 状态不正确
         if (($order->finish >= $order->types) || $order->status <> 0) return false;
 
         //计算日平均利息
         $average_lx = round($order->amount * $order->ratio / 100 / $order->types,4);
 
+        //没有利息不返利
         if (empty($average_lx)) return false;
 
         Db::startTrans();

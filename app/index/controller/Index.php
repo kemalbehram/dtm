@@ -57,7 +57,7 @@ class Index extends AdminController
         $uid = Users::address2id($address);
 
         if (empty($uid)) $this->error('请先连接钱包');
-        if ($amount <= 0 || $amount < floatval($config['zy_min'])) $this->error('质押数量最低'.$config['zy_min'].'DTM');
+        if ($amount <= 0 || $amount < (float)$config['zy_min']) $this->error('质押数量最低'.$config['zy_min'].'DTM');
         if (!in_array($types, [1,7,15,30])) $this->error('请选择质押期限');
 
         try {
@@ -103,10 +103,10 @@ class Index extends AdminController
         if (!in_array($type, [1,2])) $this->error('提交数据出错');
 
         if ($type == 1) {
-            $dtm_num = $amount / floatval($config['dtm_usdt_price']);
-            if ($dtm_num < floatval($config['business_deal_min'])) $this->error('买入数量不能低于 '.$config['business_deal_min'].' DTM');
+            $dtm_num = $amount / (float)$config['dtm_usdt_price'];
+            if ($dtm_num < (float)$config['business_deal_min']) $this->error('买入数量不能低于 '.$config['business_deal_min'].' DTM');
         } else {
-            if ($amount < floatval($config['business_deal_min'])) $this->error('卖出数量不能低于 '.$config['business_deal_min'].' DTM');
+            if ($amount < (float)$config['business_deal_min']) $this->error('卖出数量不能低于 '.$config['business_deal_min'].' DTM');
         }
 
         try {

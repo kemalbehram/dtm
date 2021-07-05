@@ -45,7 +45,7 @@ class Recharge extends TimeModel
         if (!empty($user->cid) || empty($user->fid)) return false;
 
         //如果累计充值金额不达标
-        if (Recharge::getAllRecharge($uid) < floatval($config['team_recharge'])) return false;
+        if (Recharge::getAllRecharge($uid) < (float)$config['team_recharge']) return false;
 
         //排位到直推上级的下面
         Commonpath::addCommonpath($uid, $user->fid);

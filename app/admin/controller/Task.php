@@ -118,7 +118,7 @@ class Task extends AdminController
         $config = sysconfig('other');
 
         //计算今日待分红金额
-        $award = Pool::getAmount() * floatval($config['fh_sxf_bl']) / 100;
+        $award = Pool::getAmount() * (float)$config['fh_sxf_bl'] / 100;
 
         //如果今日已分红，不在继续
 //        if (!Pool::isReward()) return 'already';
