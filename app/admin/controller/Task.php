@@ -18,16 +18,24 @@ class Task extends AdminController
     //采集BUSD充值记录
     public function task1() {
         $address = sysconfig('other','recharge_address');
+
         //contractaddress是BUSD合约
         //KeyTokenkey有访问频率限制
         $url = 'https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address='.$address.'&sort=desc&KeyTokenkey=63XZBH7UM3CCA7UC6N5JK5DYQQFW8R6W7T';
         $result = curl_get($url);
+
         if (!empty($result['result'])) {
+
+            //待入库集合
             $arr = [];
+
             foreach ($result['result'] as $v) {
+
                 //只监控收款记录
                 if ($v['to'] <> $address) continue;
+
                 $amount = $v['value'] / 1000000000000000000;
+
                 $arr[] = [
                     'tx'            =>  $v['hash'],
                     'symbol'        =>  $v['tokenSymbol'],
@@ -37,8 +45,11 @@ class Task extends AdminController
                     'block_time'    =>  $v['timeStamp'],
                     'create_time'   =>  time(),
                 ];
+
             }
+
             Db::name('recharge')->extra('IGNORE')->insertAll($arr);
+
         }
         return 'success';
     }
