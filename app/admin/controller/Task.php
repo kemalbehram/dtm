@@ -18,23 +18,23 @@ class Task extends AdminController
     //采集BUSD充值记录
     public function task1() {
         $address = sysconfig('other','recharge_address');
-        $url = 'https://api.trongrid.io/v1/accounts/'.$address.'/transactions/trc20?only_confirmed=true&only_to=true&limit=30&contract_address=TGkp9HB9v5DDEJqCqoS7iLYnCobAnqG7zN';
-        $header = [
-            //需要去trongrid用邮箱申请key，不要用默认的，有请求频率限制
-            'TRON-PRO-API-KEY'   =>  '7b55c44b-3ffa-435a-9f2d-e79341c498b6',
-        ];
-        $result = curl_get($url, $header);
-        if (!empty($result['data'])) {
+        //contractaddress是BUSD合约
+        //KeyTokenkey有访问频率限制
+        $url = 'https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address='.$address.'&sort=desc&KeyTokenkey=63XZBH7UM3CCA7UC6N5JK5DYQQFW8R6W7T';
+        $result = curl_get($url);
+        if (!empty($result['result'])) {
             $arr = [];
-            foreach ($result['data'] as $v) {
+            foreach ($result['result'] as $v) {
+                //只监控收款记录
+                if ($v['to'] <> $address) continue;
                 $amount = $v['value'] / 1000000000000000000;
                 $arr[] = [
-                    'tx'            =>  $v['transaction_id'],
-                    'symbol'        =>  $v['token_info']['symbol'],
+                    'tx'            =>  $v['hash'],
+                    'symbol'        =>  $v['tokenSymbol'],
                     'from_address'  =>  $v['from'],
                     'to_address'    =>  $v['to'],
                     'amount'        =>  $amount,
-                    'block_time'    =>  substr($v['block_timestamp'],0,10),
+                    'block_time'    =>  $v['timeStamp'],
                     'create_time'   =>  time(),
                 ];
             }
