@@ -155,37 +155,35 @@ class Orders extends TimeModel
     {
         $config = sysconfig('other');
 
-        if ($order->type == 1) {
+        if ($order['type'] == 1) {
 
             //计算总利息
-            $all_lx = $order->amount * $config['zy1_lx'] / 100;
+            $all_lx = $order['amount'] * (float)$config['zy1_lx'] / 100;
             //1天形式的，平均利息和总利息相等
             $average_lx = $all_lx;
 
-        } else if ($order->type == 7) {
+        } else if ($order['type'] == 7) {
 
             //计算总利息
-            $all_lx = $order->amount * $config['zy7_lx'] / 100;
+            $all_lx = $order['amount'] * (float)$config['zy7_lx'] / 100;
             //计算平均利息
             $average_lx = round($all_lx / 7, 4);
 
-        } else if ($order->type == 15) {
+        } else if ($order['type'] == 15) {
 
             //计算总利息
-            $all_lx = $order->amount * $config['zy15_lx'] / 100;
+            $all_lx = $order['amount'] * (float)$config['zy15_lx'] / 100;
             //计算平均利息
             $average_lx = round($all_lx / 15, 4);
 
-        } else if ($order->type == 30) {
+        } else if ($order['type'] == 30) {
 
             //计算总利息
-            $all_lx = $order->amount * $config['zy30_lx'] / 100;
+            $all_lx = $order['amount'] * (float)$config['zy30_lx'] / 100;
             //计算平均利息
             $average_lx = round($all_lx / 30, 4);
 
         }
-
-        var_dump($order['type']);exit;
 
         return $average_lx;
     }
