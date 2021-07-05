@@ -94,32 +94,35 @@ class Ajax extends AdminController
         $get = $this->request->param();
         $rule = [
             'address|钱包地址'     => 'require|alphaNum|length:42',
+            'num|提现数量'         => 'require|number',
             'token|Token'          => 'require',
         ];
         $this->validate($get, $rule);
 
         $user = Users::where('address', $get['address'])->field('id,address,amount1')->find();
+
         if (empty($user)) {
             $this->error('请连接钱包');
-        }
-        if ($user->amount1 <= 0) {
-            $this->error('USDT余额不足');
         }
         if ($user->token <> $get['token']) {
             $this->error('Token不正确');
         }
+        if ($user->amount1 <= 0 || $user->amount1 < $get['num']) {
+            $this->error('USDT余额不足');
+        }
+
         Db::startTrans();
         try {
             $config = sysconfig('other');
 
             $result = Withdraw::create([
                'uid'            =>  $user->id,
-               'amount'         =>  $user->amount1,
-               'fee'            =>  $user->amount1 * (float)$config['withdraw_fee'] / 100,
-               'real_amount'    =>  $user->amount1 * (1 - (float)$config['withdraw_fee'] / 100),
+               'amount'         =>  $get['num'],
+               'fee'            =>  $get['num'] * (float)$config['withdraw_fee'] / 100,
+               'real_amount'    =>  $get['num'] * (1 - (float)$config['withdraw_fee'] / 100),
             ]);
 
-            $user->amount1 = 0;
+            $user->amount1 -= $get['num'];
             $user->save();
 
             MoneyLog::addLog($user->id, 1, -$user->amount1, 6, $result->id);

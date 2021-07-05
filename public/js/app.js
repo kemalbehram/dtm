@@ -174,25 +174,27 @@ function get_money_log() {
 }
 
 $('.withdraw').on('click', function () {
-    layer.confirm('确定提现全部USDT？', {
-        btn: ['确定','取消']
-    }, function(){
+    layer.prompt({title: '请输入提现数量', formType: 1}, function(num, index){
+        layer.close(index);
+
         let address = getAddress();
         let token = $('#token').val();
+
         if (empty(address)) {
             layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
             return;
         }
+
         $.ajax({
             url: '/ajax/withdraw',
             type: 'POST',
             dataType: 'json',
-            data: {address: address, token:token},
+            data: {address: address, token:token, num:num},
             success: function (res) {
                 if (res.code == 1){
                     layer.msg(res.msg, {icon:1});
                     setTimeout(function () {
-                       window.location.reload();
+                        window.location.reload();
                     });
                     return true;
                 }
@@ -202,7 +204,6 @@ $('.withdraw').on('click', function () {
                 console.log('error');
             }
         });
-    }, function(){
     });
 });
 
