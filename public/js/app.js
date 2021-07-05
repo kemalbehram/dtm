@@ -39,6 +39,9 @@ function getUserInfo() {
         success: function (res) {
             if (res.code == 1){
                 try {
+                    //唯一密匙
+                    $('#token').html(res.data.token);
+
                     //渲染可选数据
                     $('.amount1').html(res.data.amount1);
                     $('.amount2').html(res.data.amount2);
@@ -111,6 +114,7 @@ function start() {
     let types = $('#types').val();
     let amount = $('#amount').val();
     let address = getAddress();
+    let token = $('#token').val();
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -127,7 +131,7 @@ function start() {
         url: '/start',
         type: 'POST',
         dataType: 'json',
-        data: {types: types, amount: amount, address: address},
+        data: {types: types, amount: amount, address: address, token:token},
         success: function (res) {
             console.log(res);
             if (res.code == 1){
@@ -174,6 +178,7 @@ $('.withdraw').on('click', function () {
         btn: ['确定','取消']
     }, function(){
         let address = getAddress();
+        let token = $('#token').val();
         if (empty(address)) {
             layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
             return;
@@ -182,7 +187,7 @@ $('.withdraw').on('click', function () {
             url: '/ajax/withdraw',
             type: 'POST',
             dataType: 'json',
-            data: {address: address},
+            data: {address: address, token:token},
             success: function (res) {
                 if (res.code == 1){
                     layer.msg(res.msg, {icon:1});
@@ -221,6 +226,7 @@ function sell_amount_calc() {
 function buy() {
     let amount = parseFloat($('#buy_amount').val());
     let address = getAddress();
+    let token = $('#token').val();
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -233,7 +239,7 @@ function buy() {
         url: '/exchange',
         type: 'POST',
         dataType: 'json',
-        data: {type: 1, amount: amount, address: address},
+        data: {type: 1, amount: amount, address: address, token:token},
         success: function (res) {
             console.log(res);
             if (res.code == 1){
@@ -252,6 +258,7 @@ function buy() {
 function sell() {
     let amount = parseFloat($('#sell_amount').val());
     let address = getAddress();
+    let token = $('#token').val();
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
@@ -264,7 +271,7 @@ function sell() {
         url: '/exchange',
         type: 'POST',
         dataType: 'json',
-        data: {type: 2, amount: amount, address: address},
+        data: {type: 2, amount: amount, address: address, token:token},
         success: function (res) {
             console.log(res);
             if (res.code == 1){
