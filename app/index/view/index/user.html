@@ -183,8 +183,8 @@
 </script>
 
 <div id="recharge" style="display: none;padding: 0 5px;">
-<!--    <div id="qrcode"></div>-->
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={:sysconfig('other', 'recharge_address')}" alt="">
+    <div id="qrcode"></div>
+<!--    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={:sysconfig('other', 'recharge_address')}" alt="">-->
     <div class="tip">
         <div style="line-height: 22px;">
             <div style="margin-bottom: 15px;">
@@ -209,14 +209,15 @@
             getUserInfo();
             get_money_log();
 
-            // new QRCode("qrcode", {
-            //     text: "{:sysconfig('other', 'recharge_address')}",
-            //     width: 180,
-            //     height: 180,
-            //     colorDark : "#000000",
-            //     colorLight : "#ffffff",
-            //     correctLevel : QRCode.CorrectLevel.H
-            // });
+            new QRCode("qrcode", {
+                text: "{:sysconfig('other', 'recharge_address')}",
+                width: 180,
+                height: 180,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
         }, 500);
     });
 
