@@ -20,7 +20,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'uid', title: '用户ID', width: 100},
                     {field: 'address', title: '钱包地址'},
                     {field: 'amount', title: '质押数量(DTM)'},
-                    {field: 'type', title: '质押期限', selectList:{0:'异常', 1:'1天', 7:'7天', 15:'15天', 30:'30天'}},
+                    {field: 'types', title: '质押期限', selectList:{0:'异常', 1:'1天', 7:'7天', 15:'15天', 30:'30天'}},
                     {field: 'finish', title: '已质押天数', search: false},
                     {field: 'fl_amount', title: '已发放利息', search: false},
                     {field: 'create_time', title: '质押时间', search: 'range'},
