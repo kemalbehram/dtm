@@ -125,7 +125,7 @@ class Ajax extends AdminController
             $user->amount1 -= $get['num'];
             $user->save();
 
-            MoneyLog::addLog($user->id, 1, -$user->amount1, 6, $result->id);
+            MoneyLog::addLog($user->id, 1, -$get['num'], 6, $result->id);
 
             Db::commit();
         }catch (\Exception $e) {
