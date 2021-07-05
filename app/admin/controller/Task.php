@@ -31,10 +31,13 @@ class Task extends AdminController
 
             foreach ($result['result'] as $v) {
 
-                //只监控收款记录
+                //非收款记录的抛弃
                 if ($v['to'] <> $address) continue;
 
                 $amount = bcdiv($v['value'],1000000000000000000,4);
+
+                //金额不正常的抛弃
+                if ($amount <= 0) continue;
 
                 $arr[] = [
                     'tx'            =>  $v['hash'],
