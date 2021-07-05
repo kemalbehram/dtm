@@ -108,7 +108,7 @@ class Ajax extends AdminController
             $this->error('Token不正确');
         }
         if ($user->amount1 <= 0 || $user->amount1 < $get['num']) {
-            $this->error('USDT余额不足');
+            $this->error('BUSD余额不足');
         }
 
         Db::startTrans();
