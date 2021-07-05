@@ -185,7 +185,7 @@ class Orders extends TimeModel
 
         }
 
-        var_dump($order->toArray());exit;
+        var_dump($order['type']);exit;
 
         return $average_lx;
     }
