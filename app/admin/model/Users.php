@@ -96,11 +96,11 @@ class Users extends TimeModel
         $config = sysconfig('other');
 
         //默认手续费50% (USDT)
-        $sell_fee = floatval($config['sell_fee2']);
+        $sell_fee = (float)$config['sell_fee2'];
 
         //下面有三个会员手续费1% (USDT)
         if (self::isCommonpathNum3($uid)) {
-            $sell_fee = floatval($config['sell_fee1']);
+            $sell_fee = (float)$config['sell_fee1'];
         }
 
         return $sell_fee;
@@ -194,15 +194,15 @@ class Users extends TimeModel
             }
 
             //计算获得DTM数量
-            $dtm_amount = $amount / floatval($config['dtm_usdt_price']);
+            $dtm_amount = $amount / (float)$config['dtm_usdt_price'];
 
             if ($dtm_amount <= 0 ) throw new Exception('数量计算出错');
 
             //买入扣10%手续费剩下的90%，再拿50%自动购买7天的质押，剩下的才是实际到账的。
             //兑换DTM手续费
-            $buy_fee = $dtm_amount * floatval($config['buy_fee']) / 100;
+            $buy_fee = $dtm_amount * (float)$config['buy_fee'] / 100;
             //质押金额
-            $zy_amount = ($dtm_amount - $buy_fee) * floatval($config['auto_buy_bl']) / 100;
+            $zy_amount = ($dtm_amount - $buy_fee) * (float)$config['auto_buy_bl'] / 100;
             //实际到账
             $real_amount = $dtm_amount - $buy_fee - $zy_amount;
 
@@ -217,7 +217,8 @@ class Users extends TimeModel
             Pool::addPool($buy_fee);
 
             //每次兑换后DTM价格涨一点
-            $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
+            $num = (float)$config['dtm_usdt_price'] * (float)$config['dtm_usdt_incdec'] / 100;
+            $num = round($num, 4);
             //变更价格
             SystemConfig::where('name', 'dtm_usdt_price')->inc('value', $num)->update();
             //刷新配置缓存
@@ -251,7 +252,7 @@ class Users extends TimeModel
             }
 
             //计算获得USDT数量
-            $usdt_amount = $amount * floatval($config['dtm_usdt_price']);
+            $usdt_amount = $amount * (float)$config['dtm_usdt_price'];
 
             if ($usdt_amount <= 0 ) throw new Exception('数量计算出错');
 
@@ -267,14 +268,15 @@ class Users extends TimeModel
             $user->amount2 -= $amount;
             $user->save();
             //手续费资金池到账，换算成DTM
-            Pool::addPool($sell_fee / floatval($config['dtm_usdt_price']));
+            Pool::addPool($sell_fee / (float)$config['dtm_usdt_price']);
 
             //每次兑换后DTM价格跌一点，受地板价限制
             //计算减少金额
-            $num = floatval($config['dtm_usdt_price']) * floatval($config['dtm_usdt_incdec']) / 100;
+            $num = (float)$config['dtm_usdt_price'] * (float)$config['dtm_usdt_incdec'] / 100;
+            $num = round($num, 4);
 
             //如果减少后还是高于地板价才能继续
-            if (floatval($config['dtm_usdt_price']) - $num >= $config['min_dtm_usdt_price']) {
+            if ((float)$config['dtm_usdt_price'] - $num >= (float)$config['min_dtm_usdt_price']) {
 
                 //变更价格
                 SystemConfig::where('name', 'dtm_usdt_price')->dec('value', $num)->update();
@@ -303,7 +305,7 @@ class Users extends TimeModel
         $config = sysconfig('other');
 
         //先筛选DTM余额大于100的用户
-        $users = self::where('amount2', '>=', floatval($config['fh_ye_min']))->select();
+        $users = self::where('amount2', '>=', (float)$config['fh_ye_min'])->select();
 
         //如果存在
         if (!$users->isEmpty()) {
