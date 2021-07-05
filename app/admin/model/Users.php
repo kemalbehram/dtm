@@ -29,10 +29,14 @@ class Users extends TimeModel
                 'fid'       =>  $fid,
             ]);
 
+            //创建唯一密匙
+            $result->token = token($address, $result->create_time);
+            $result->save();
+
             //注册关系处理
             Regpath::addRegpath($result->id, $fid);
 
-            $user = self::field('id,address,amount1,amount2')->find($result->id);
+            $user = self::field('id,address,amount1,amount2,token')->find($result->id);
 
             Db::commit();
         } catch (\Exception $e) {
