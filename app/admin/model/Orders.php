@@ -99,7 +99,9 @@ class Orders extends TimeModel
         if (($order->finish >= $order->type) || $order->status <> 0) return false;
 
         //计算平均利息
-        $average_lx = self::calc_lx($order->id);
+        $average_lx = self::calc_lx($order);
+
+        if (empty($average_lx)) return false;
 
         Db::startTrans();
         try {
@@ -149,12 +151,9 @@ class Orders extends TimeModel
     }
 
     //平均利息计算
-    public static function calc_lx($order_id)
+    public static function calc_lx($order)
     {
         $config = sysconfig('other');
-
-        //查询订单
-        $order = self::where('id', $order_id)->find();
 
         if ($order->type == 1) {
 
@@ -185,6 +184,8 @@ class Orders extends TimeModel
             $average_lx = round($all_lx / 30, 4);
 
         }
+
+        var_dump($order);exit;
 
         return $average_lx;
     }
