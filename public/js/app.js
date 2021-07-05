@@ -174,17 +174,16 @@ function get_money_log() {
 }
 
 $('.withdraw').on('click', function () {
+    let address = getAddress();
+    let token = $('#token').val();
+
+    if (empty(address)) {
+        layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+        return;
+    }
+
     layer.prompt({title: '请输入提现数量', formType: 2}, function(num, index){
         layer.close(index);
-
-        let address = getAddress();
-        let token = $('#token').val();
-
-        if (empty(address)) {
-            layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
-            return;
-        }
-
         $.ajax({
             url: '/ajax/withdraw',
             type: 'POST',
