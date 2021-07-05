@@ -107,7 +107,7 @@ class Task extends AdminController
             $result && $num++;
         }
 
-        return '今日返利人数：'.$num.'人';
+        return '今日返利订单数：'.$num.'单';
 
     }
 
