@@ -24,15 +24,15 @@ class Orders extends TimeModel
     }
 
     //根据质押天数获取利息比例
-    public static function getRatio(int $type)
+    public static function getRatio(int $types)
     {
         $config = sysconfig('other');
 
-        return $config['zy'.$type.'_lx'] ?? 0;
+        return $config['zy'.$types.'_lx'] ?? 0;
     }
 
     //质押DTM
-    public static function fund(int $uid, int $type, float $amount)
+    public static function fund(int $uid, int $types, float $amount)
     {
         Db::startTrans();
         try {
@@ -49,8 +49,8 @@ class Orders extends TimeModel
                 'uid'       =>  $user->id,
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
-                'type'      =>  $type,
-                'ratio'     =>  self::getRatio($type),
+                'types'     =>  $types,
+                'ratio'     =>  self::getRatio($types),
             ]);
 
             //推荐奖清算
@@ -67,7 +67,7 @@ class Orders extends TimeModel
     }
 
     //USDT兑DTM 自动质押
-    public static function auto_fund(int $uid, int $type, float $amount)
+    public static function auto_fund(int $uid, int $types, float $amount)
     {
         Db::startTrans();
         try {
@@ -78,8 +78,8 @@ class Orders extends TimeModel
                 'uid'       =>  $user->id,
                 'address'   =>  $user->address,
                 'amount'    =>  $amount,
-                'type'      =>  $type,
-                'ratio'     =>  self::getRatio($type),
+                'types'      =>  $types,
+                'ratio'     =>  self::getRatio($types),
                 'auto'      =>  1,
             ]);
 
@@ -105,13 +105,11 @@ class Orders extends TimeModel
         //如果订单不存在
         if (empty($order)) return false;
 
-        var_dump($order);exit;
-
         //如果返利已经完成 或 状态不正确
-        if (($order->finish >= $order->type) || $order->status <> 0) return false;
+        if (($order->finish >= $order->types) || $order->status <> 0) return false;
 
         //计算日平均利息
-        $average_lx = round($order['amount'] * $order['ratio'] / 100 / $order['type'],4);
+        $average_lx = round($order->amount * $order->ratio / 100 / $order->types,4);
 
         if (empty($average_lx)) return false;
 
@@ -128,7 +126,7 @@ class Orders extends TimeModel
             $order->fl_amount += $average_lx;
 
             //如果订单刚好完结
-            if ($order->finish + 1 >= $order->type) {
+            if ($order->finish + 1 >= $order->types) {
 
                 //变更订单状态为已到期
                 $order->status = 1;
@@ -177,7 +175,7 @@ class Orders extends TimeModel
             if (empty($order)) throw new Exception('订单不存在');
 
             //其他检查
-            if (($order->finish >= $order->type) || $order->status <> 0) throw new Exception('订单已完结或状态不正确');
+            if (($order->finish >= $order->types) || $order->status <> 0) throw new Exception('订单已完结或状态不正确');
 
             //计算最终金额(可能是负数)
             //提前解押：扣10%本金，退回已派发利息。

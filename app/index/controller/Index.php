@@ -50,7 +50,7 @@ class Index extends AdminController
     {
         $amount = $this->request->param('amount/d');
         $address = $this->request->param('address/s');
-        $type = $this->request->param('type/d');
+        $types = $this->request->param('types/d');
 
         $config = sysconfig('other');
 
@@ -58,10 +58,10 @@ class Index extends AdminController
 
         if (empty($uid)) $this->error('请先连接钱包');
         if ($amount <= 0 || $amount < floatval($config['zy_min'])) $this->error('质押数量最低'.$config['zy_min'].'DTM');
-        if (!in_array($type, [1,7,15,30])) $this->error('请选择质押期限');
+        if (!in_array($types, [1,7,15,30])) $this->error('请选择质押期限');
 
         try {
-            Orders::fund($uid, $type, $amount);
+            Orders::fund($uid, $types, $amount);
         } catch (\Exception $e) {
             $this->error('质押失败：'.$e->getMessage());
         }
