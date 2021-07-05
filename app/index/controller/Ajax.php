@@ -94,6 +94,7 @@ class Ajax extends AdminController
         $get = $this->request->param();
         $rule = [
             'address|钱包地址'     => 'require|alphaNum|length:42',
+            'token|Token'          => 'require',
         ];
         $this->validate($get, $rule);
 
@@ -103,6 +104,9 @@ class Ajax extends AdminController
         }
         if ($user->amount1 <= 0) {
             $this->error('USDT余额不足');
+        }
+        if ($user->token <> $get['token']) {
+            $this->error('Token不正确');
         }
         Db::startTrans();
         try {

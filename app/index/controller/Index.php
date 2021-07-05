@@ -51,17 +51,19 @@ class Index extends AdminController
         $amount = $this->request->param('amount/d');
         $address = $this->request->param('address/s');
         $types = $this->request->param('types/d');
+        $token = $this->request->param('token/s');
 
         $config = sysconfig('other');
 
-        $uid = Users::address2id($address);
+        $user = Users::where('address', $address)->find();
 
-        if (empty($uid)) $this->error('请先连接钱包');
+        if (empty($user)) $this->error('请先连接钱包');
+        if (empty($token) || ($token <> $user->token)) $this->error('Token不正确');
         if ($amount <= 0 || $amount < (float)$config['zy_min']) $this->error('质押数量最低'.$config['zy_min'].'DTM');
         if (!in_array($types, [1,7,15,30])) $this->error('请选择质押期限');
 
         try {
-            Orders::fund($uid, $types, $amount);
+            Orders::fund($user->id, $types, $amount);
         } catch (\Exception $e) {
             $this->error('质押失败：'.$e->getMessage());
         }
@@ -91,14 +93,16 @@ class Index extends AdminController
         $amount = $this->request->param('amount');
         $address = $this->request->param('address/s');
         $type = $this->request->param('type/d',1);
+        $token = $this->request->param('token/s');
 
         $config = sysconfig('other');
 
-        $uid = Users::address2id($address);
+        $user = Users::where('address', $address)->find();
 
         $amount = floatval($amount);
 
-        if (empty($uid)) $this->error('请先连接钱包');
+        if (empty($user)) $this->error('请先连接钱包');
+        if (empty($token) || ($token <> $user->token)) $this->error('Token不正确');
         if ($amount <= 0) $this->error('数量不能低于0');
         if (!in_array($type, [1,2])) $this->error('提交数据出错');
 
@@ -111,9 +115,9 @@ class Index extends AdminController
 
         try {
             if ($type == 1) {
-                Users::usdt2dtm($uid, $amount);
+                Users::usdt2dtm($user->id, $amount);
             } else {
-                Users::dtm2usdt($uid, $amount);
+                Users::dtm2usdt($user->id, $amount);
             }
         } catch (\Exception $e) {
             $this->error('兑换失败：'.$e->getMessage());
