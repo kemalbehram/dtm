@@ -50,7 +50,7 @@
 <script id="list" type="text/html">
     {{# if (d.length){ }}
         {{# layui.each(d, function(i, v){ }}
-            <li onclick="">
+            <li onclick="release({{ v.id }})">
                 <div class="title">
                     <div class="label">质押金额</div>
                     <div class="value">{{ v.amount }} DTM</div>
@@ -79,6 +79,39 @@
     $(function () {
         get_order();
     });
+
+    function release(order_id) {
+        let address = getAddress();
+        let token = $('#token').val();
+
+        if (empty(address)) {
+            layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
+            return;
+        }
+
+        layer.confirm('提前解押需扣一定比例的%本金，并退回已派发利息。?', {icon: 3, title:'提示'}, function(index){
+            layer.close(index);
+            $.ajax({
+                url: '/release',
+                type: 'POST',
+                dataType: 'json',
+                data: {address: address, token:token, order_id:order_id},
+                success: function (res) {
+                    if (res.code == 1){
+                        layer.msg(res.msg, {icon:1});
+                        setTimeout(function () {
+                            window.location.reload();
+                        });
+                        return true;
+                    }
+                    layer.msg(res.msg, {icon:2});
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+        });
+    }
 </script>
 
 </body>
