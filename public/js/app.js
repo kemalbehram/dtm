@@ -40,7 +40,7 @@ function getUserInfo() {
             if (res.code == 1){
                 try {
                     //唯一密匙
-                    $('#token').html(res.data.token);
+                    $('#token').val(res.data.token);
 
                     //渲染可选数据
                     $('.amount1').html(res.data.amount1);
