@@ -99,7 +99,7 @@ class Ajax extends AdminController
         ];
         $this->validate($get, $rule);
 
-        $user = Users::where('address', $get['address'])->field('id,address,amount1')->find();
+        $user = Users::where('address', $get['address'])->field('id,address,amount1,token')->find();
 
         if (empty($user)) {
             $this->error('请连接钱包');
