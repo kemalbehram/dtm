@@ -229,9 +229,9 @@ class Users extends TimeModel
             TriggerService::updateSysconfig();
 
             //资金日志
-            MoneyLog::addLog($uid, 1, -$buy_fee, 11, 0);
+            MoneyLog::addLog($uid, 1, $buy_fee, 11, 0);
             MoneyLog::addLog($uid, 0, $real_amount, 13, 0);
-            MoneyLog::addLog($uid, 1, -$zy_amount, 12, 0);
+            MoneyLog::addLog($uid, 1, $zy_amount, 12, 0);
 
             Db::commit();
         } catch (\Exception $e) {
@@ -290,7 +290,7 @@ class Users extends TimeModel
             }
 
             //资金日志
-            MoneyLog::addLog($uid, 1, -$sell_fee, 14, 0);
+            MoneyLog::addLog($uid, 1, $sell_fee, 14, 0);
             MoneyLog::addLog($uid, 0, $real_amount, 15, 0);
 
             Db::commit();
