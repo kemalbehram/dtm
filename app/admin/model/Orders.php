@@ -126,7 +126,7 @@ class Orders extends TimeModel
             $order->fl_amount += $average_lx;
 
             //如果订单刚好完结
-            if ($order->finish + 1 >= $order->types) {
+            if ($order->finish >= $order->types) {
 
                 //变更订单状态为已到期
                 $order->status = 1;
@@ -179,7 +179,7 @@ class Orders extends TimeModel
 
             //计算最终金额(可能是负数)
             //提前解押：扣10%本金，退回已派发利息。
-            $amount = $order->amount - $order->amount * $config['zy_jy'] / 100 - $order->fl_amount;
+            $amount = $order->amount - $order->amount * (float)$config['zy_jy'] / 100 - $order->fl_amount;
 
             //余额变更
             Users::changeAmount($order->uid, 2, $amount);
