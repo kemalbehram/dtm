@@ -174,7 +174,7 @@ function get_money_log() {
 }
 
 $('.withdraw').on('click', function () {
-    layer.prompt({title: '请输入提现数量', formType: 1}, function(num, index){
+    layer.prompt({title: '请输入提现数量', formType: 2}, function(num, index){
         layer.close(index);
 
         let address = getAddress();
