@@ -34,7 +34,7 @@ class Task extends AdminController
                 //只监控收款记录
                 if ($v['to'] <> $address) continue;
 
-                $amount = $v['value'] / 1000000000000000000;
+                $amount = bcdiv($v['value'],1000000000000000000);
 
                 $arr[] = [
                     'tx'            =>  $v['hash'],
