@@ -105,7 +105,7 @@ class Orders extends TimeModel
         //如果订单不存在
         if (empty($order)) return false;
 
-        var_dump(($order->finish >= $order->type));exit;
+        var_dump([$order->finish, $order->type]);exit;
 
         //如果返利已经完成 或 状态不正确
         if (($order->finish >= $order->type) || $order->status <> 0) return false;
