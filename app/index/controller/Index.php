@@ -125,4 +125,21 @@ class Index extends AdminController
 
         $this->success('兑换成功');
     }
+
+    //提前解押
+    public function release()
+    {
+        try {
+
+            $order_id = $this->request->param('order_id/d');
+            $order = Orders::find($order_id);
+
+            Orders::release($order->id);
+
+        } catch (\Exception $e) {
+            $this->error('提前解押失败：'.$e->getMessage());
+        }
+
+        $this->success('提前解押成功');
+    }
 }

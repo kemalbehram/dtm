@@ -14,3 +14,4 @@ Route::rule('order', 'index/index/order');
 Route::rule('user', 'index/index/user');
 Route::rule('start', 'index/index/start');
 Route::rule('exchange', 'index/index/exchange');
+Route::rule('release', 'index/index/release');
