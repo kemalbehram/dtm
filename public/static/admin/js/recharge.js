@@ -21,7 +21,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {type: 'checkbox'},
                     {field: 'id', title: 'id', width: 100, search: false, hide: true},
                     {field: 'tx', title: 'TX', templet: function (d){
-                            return '<a style="text-decoration: underline;" href="https://tronscan.org/#/transaction/'+ d.tx +'" class="layui-table-cell" target="_blank">'+ d.tx +'</a>';
+                            return '<a style="text-decoration: underline;" href="https://bscscan.com/tx/'+ d.tx +'" class="layui-table-cell" target="_blank">'+ d.tx +'</a>';
                         }
                     },
                     {field: 'from_address', title: '用户地址',width: 340},
