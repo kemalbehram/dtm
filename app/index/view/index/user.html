@@ -183,7 +183,8 @@
 </script>
 
 <div id="recharge" style="display: none;padding: 0 5px;">
-    <div id="qrcode"></div>
+<!--    <div id="qrcode"></div>-->
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=324x324&data={:sysconfig('other', 'recharge_address')}" alt="">
     <div class="tip">
         <div style="line-height: 22px;">
             <div style="margin-bottom: 15px;">
