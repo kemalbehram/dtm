@@ -29,7 +29,7 @@ class Users extends TimeModel
                 'fid'       =>  $fid,
             ]);
 
-            //创建唯一密匙
+            //使用钱包地址和注册时间，创建唯一密匙
             $result->token = token($address, $result->create_time);
             $result->save();
 
