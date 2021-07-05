@@ -46,7 +46,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                                 url: init.reject_url,
                                 method: 'request',
                                 auth: 'reject',
-                                class: 'layui-btn layui-btn-xs layui-btn-danger',
+                                class: 'layui-btn layui-btn-xs',
                             },{
                                 text: '删除',
                                 title: '确定删除？',
