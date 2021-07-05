@@ -182,7 +182,7 @@ $('.withdraw').on('click', function () {
         return;
     }
 
-    layer.prompt({title: '请输入提现数量', formType: 2}, function(num, index){
+    layer.prompt({title: '请输入提现数量', formType: 0}, function(num, index){
         layer.close(index);
         $.ajax({
             url: '/ajax/withdraw',
