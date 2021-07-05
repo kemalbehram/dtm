@@ -108,14 +108,14 @@ $(window).scroll(function () {
 });
 
 function start() {
-    let type = $('#type').val();
+    let types = $('#types').val();
     let amount = $('#amount').val();
     let address = getAddress();
     if (empty(address)) {
         layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});
         return;
     }
-    if (empty(type)) {
+    if (empty(types)) {
         layer.msg('请选择质押期限', {icon:2, skin:'white'}, function () {});
         return;
     }
@@ -127,7 +127,7 @@ function start() {
         url: '/start',
         type: 'POST',
         dataType: 'json',
-        data: {type: type, amount: amount, address: address},
+        data: {types: types, amount: amount, address: address},
         success: function (res) {
             console.log(res);
             if (res.code == 1){
