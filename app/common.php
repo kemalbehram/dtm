@@ -41,6 +41,16 @@ if (!function_exists('password')) {
 
 }
 
+if (!function_exists('token')) {
+
+    function token($value, $key = '')
+    {
+        $value = sha1('dtm168_') . md5($value) . md5('_encrypt') . sha1($value) . sha1($key);
+        return sha1($value);
+    }
+
+}
+
 if (!function_exists('xdebug')) {
 
     /**
