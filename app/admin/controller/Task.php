@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\Commonpath;
 use app\admin\model\MoneyLog;
 use app\admin\model\Pool;
 use app\admin\model\Regpath;
@@ -171,7 +172,7 @@ class Task extends AdminController
     public function test()
     {
         try {
-            Recharge::rechargeAddCommonpath(390);
+            Commonpath::addCommonpath(455, 457);
         } catch (Exception $e) {
             var_dump($e->getMessage());
         }
