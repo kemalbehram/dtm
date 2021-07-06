@@ -7,6 +7,7 @@ use app\admin\model\Pool;
 use app\admin\model\Regpath;
 use app\common\controller\AdminController;
 use think\App;
+use think\Exception;
 use think\facade\Db;
 use app\admin\model\Recharge;
 use app\admin\model\Users;
@@ -51,46 +52,53 @@ class Task extends AdminController
     //检测并入库充值记录
     public function task2()
     {
-        //筛选所有未处理的数据
-        $data = Recharge::where('status', 0)->select();
+        try {
+            //筛选所有未处理的数据
+            $data = Recharge::where('status', 0)->select();
 
-        //循环处理订单
-        foreach ($data as $v) {
-            //获取用户资料
-            $user = Users::where('address', strtolower($v->from_address))->find();
+            //循环处理订单
+            foreach ($data as $v) {
+                //获取用户资料
+                $user = Users::where('address', strtolower($v->from_address))->find();
 
-            //如果用户不存在，仅标记为已处理后抛弃
-            if (empty($user)) {
-                $v->status = 1;
-                $v->save();
-                continue;
+                //如果用户不存在，仅标记为已处理后抛弃
+                if (empty($user)) {
+                    $v->status = 1;
+                    $v->save();
+                    continue;
+                }
+
+                //开启事务
+                Db::startTrans();
+                try {
+                    //资金入账
+                    $user->amount1 += $v->amount;
+
+                    //提交数据
+                    $user->save();
+
+                    //插入资金日志
+                    MoneyLog::addLog($user->id,0, $v->amount,5, $v->id);
+
+                    //充值记录标记为已处理、已入账
+                    $v->status = 1;
+                    $v->state = 1;
+                    $v->save();
+
+                    Db::commit();
+                } catch (\Exception $e) {
+                    Db::rollback();
+                    continue;
+                }
+
+                //充值排位
+                Recharge::rechargeAddCommonpath($user->id);
+
             }
 
-            //开启事务
-            Db::startTrans();
-            try {
-                //资金入账
-                $user->amount1 += $v->amount;
+        } catch (Exception $e) {
 
-                //提交数据
-                $user->save();
-
-                //插入资金日志
-                MoneyLog::addLog($user->id,0, $v->amount,5, $v->id);
-
-                //充值记录标记为已处理、已入账
-                $v->status = 1;
-                $v->state = 1;
-                $v->save();
-
-                Db::commit();
-            } catch (\Exception $e) {
-                Db::rollback();
-                continue;
-            }
-
-            //充值排位
-            Recharge::rechargeAddCommonpath($user->id);
+            return 'error：'.$e->getMessage();
 
         }
         return 'success';
