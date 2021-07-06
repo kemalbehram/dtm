@@ -73,7 +73,7 @@ class Commonpath extends TimeModel
 
                     //查询末级叶子节点的上级在这一层的位置
 
-                    $last_fid_position = array_search($last_fid, $fid_level_child);
+                    $last_fid_position = array_search($last_fid, array_values($fid_level_child));
 
                     var_dump($last_fid_position);exit;
 
