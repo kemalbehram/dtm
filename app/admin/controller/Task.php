@@ -169,15 +169,4 @@ class Task extends AdminController
 
         return 'success';
     }
-
-    public function test()
-    {
-        try {
-            foreach (range(470,477) as $v) {
-                Commonpath::addCommonpath($v, 457);
-            }
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
-    }
 }

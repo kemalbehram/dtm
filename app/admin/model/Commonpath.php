@@ -44,8 +44,6 @@ class Commonpath extends TimeModel
                 //查询末级叶子节点的上级的第一层节点情况
                 $last_fid_child = self::getLevel1($last_fid);
 
-//                var_dump($last_fid_child);exit;
-
                 //末级叶子节点的上级的第一层节点数量
                 $last_fid_child_count = count($last_fid_child);
 
@@ -74,16 +72,11 @@ class Commonpath extends TimeModel
                     $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->order('id','asc')->column('member_uid');
                     $fid_level_child = array_values($fid_level_child);
 
-//                    var_dump($fid_level_child);
-//                    var_dump($last_fid);
-
                     //查询末级叶子节点的上级在这一层的位置
                     $last_fid_position = array_search($last_fid, $fid_level_child);
 
                     //如果这个位置存在
                     if ($last_fid_position !== false) {
-
-//                        var_dump($last_fid_position.'-'.(count($fid_level_child) - 1));exit;
 
                         //如果位置不在该层的末尾
                         if ($last_fid_position <> count($fid_level_child) - 1) {
@@ -98,8 +91,6 @@ class Commonpath extends TimeModel
 
                             //如果在该层末尾，需要排到该层第一个元素的第一个子元素下面, 且其位置也肯定为1
                             $first_child = self::getLevel1($fid_level_child[0]);
-//                            var_dump($first_child);exit;
-
                             self::addPath($uid, $first_child[0], $fid,1);
 
                         }
