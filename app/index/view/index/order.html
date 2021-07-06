@@ -50,7 +50,7 @@
 <script id="list" type="text/html">
     {{# if (d.length){ }}
         {{# layui.each(d, function(i, v){ }}
-            <li onclick="release({{ v.id }})">
+            <li onclick="release({{ v.id }}, {{ v.status }})">
                 <div class="title">
                     <div class="label">质押金额</div>
                     <div class="value">{{ v.amount }} DTM</div>
@@ -84,9 +84,13 @@
         get_order();
     });
 
-    function release(order_id) {
+    function release(order_id, status) {
         let address = getAddress();
         let token = $('#token').val();
+
+        if (status != 0) {
+            return;
+        }
 
         if (empty(address)) {
             layer.msg('请先连接钱包', {icon:2, skin:'white'}, function () {});

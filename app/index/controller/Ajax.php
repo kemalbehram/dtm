@@ -150,7 +150,7 @@ class Ajax extends AdminController
 
         $data = Orders::where('address', $get['address'])->select();
         foreach ($data as &$v) {
-            $status_name = [1 => '质押中', 2 => '已到期', 3 => '已解押'];
+            $status_name = [0 => '质押中', 1 => '已到期', 2 => '已解押'];
             $v->types_name = $status_name[$v->status];
         }
         $this->success('获取成功', $data);
