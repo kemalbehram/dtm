@@ -74,6 +74,8 @@ class Commonpath extends TimeModel
                     $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->order('id','asc')->column('member_uid');
                     $fid_level_child = array_values($fid_level_child);
 
+                    var_dump($fid_level_child);
+
                     //查询末级叶子节点的上级在这一层的位置
                     $last_fid_position = array_search($last_fid, $fid_level_child);
 
