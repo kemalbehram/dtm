@@ -68,11 +68,11 @@ class Commonpath extends TimeModel
                     //查询末级叶子节点的上级相对于fid的层级
                     $last_fid_level = self::where(['uid' => $fid, 'member_uid' => $last_fid])->value('level');
 
-                    var_dump($last_fid_level);exit;
-
-
                     //查询fid在该层的所有成员
                     $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->column('member_uid');
+
+                    var_dump($fid_level_child);exit;
+
 
                     //查询末级叶子节点的上级在这一层的位置
 
