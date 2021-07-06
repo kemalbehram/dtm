@@ -56,6 +56,15 @@ class Commonpath extends TimeModel
 
                     //否则要看看末级叶子节点的上级在他自己这一层的位置
 
+                    //如果末级叶子节点的上级就是上级
+                    if ($last_fid == $fid) {
+
+                        //排到上级第一个元素下面
+                        self::addPath($uid, $last_fid_child[0], $fid,1);
+                        return true;
+
+                    }
+
                     //查询末级叶子节点的上级相对于fid的层级
                     $last_fid_level = self::where(['uid' => $fid, 'member_uid' => $last_fid])->value('level');
 
