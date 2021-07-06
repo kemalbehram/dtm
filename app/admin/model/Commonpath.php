@@ -96,8 +96,9 @@ class Commonpath extends TimeModel
 
                         } else {
 
-                            //如果在该层末尾，需要排到该层第一个元素下面, 且其位置也肯定为1（没有子元素的新节点）
-                            self::addPath($uid, $fid_level_child[0], $fid,1);
+                            //如果在该层末尾，需要排到该层第一个元素的第一个子元素下面, 且其位置也肯定为1
+                            $first_child = self::getLevel1($fid_level_child[0]);
+                            self::addPath($uid, $first_child[0], $fid,1);
 
                         }
 
