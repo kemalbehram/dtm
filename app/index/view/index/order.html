@@ -102,7 +102,7 @@
             return;
         }
 
-        layer.confirm('提前解押需扣一定比例的本金，并退回已派发利息。?', {icon: 3, title:'提前解押'}, function(index){
+        layer.confirm('提前解押需扣一定比例的本金，并向平台退回已派发利息，是否继续?', {icon: 3, title:'提前解押'}, function(index){
             layer.close(index);
             $.ajax({
                 url: '/release',
