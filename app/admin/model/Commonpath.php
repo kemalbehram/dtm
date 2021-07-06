@@ -44,7 +44,7 @@ class Commonpath extends TimeModel
                 //查询末级叶子节点的上级的第一层节点情况
                 $last_fid_child = self::getLevel1($last_fid);
 
-                var_dump($last_fid_child);exit;
+//                var_dump($last_fid_child);exit;
 
                 //末级叶子节点的上级的第一层节点数量
                 $last_fid_child_count = count($last_fid_child);
