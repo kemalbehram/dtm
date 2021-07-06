@@ -122,7 +122,8 @@ class Commonpath extends TimeModel
     //最大level可能有3个叶子节点，取ID最大即可
     public static function getLast(int $uid)
     {
-        return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->limit(1)->value('member_uid');
+//        return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->limit(1)->value('member_uid');
+        return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->field('member_uid')->select();
     }
 
     //查询某账号的所有公排下级
