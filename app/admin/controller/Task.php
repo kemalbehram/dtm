@@ -173,7 +173,7 @@ class Task extends AdminController
     public function test()
     {
         try {
-            foreach (range(465,469) as $v) {
+            foreach (range(470,477) as $v) {
                 Commonpath::addCommonpath($v, 457);
             }
         } catch (Exception $e) {
