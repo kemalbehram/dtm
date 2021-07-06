@@ -167,4 +167,13 @@ class Task extends AdminController
 
         return 'success';
     }
+
+    public function test()
+    {
+        try {
+            Recharge::rechargeAddCommonpath(390);
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+        }
+    }
 }
