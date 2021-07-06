@@ -123,7 +123,7 @@ class Commonpath extends TimeModel
     public static function getLast(int $uid)
     {
 //        return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->limit(1)->value('member_uid');
-        return self::where('uid', $uid)->order(['level'=>'desc','id'=>'desc'])->field('member_uid')->select();
+        return self::where('uid', $uid)->order('id','desc')->field('member_uid')->select();
     }
 
     //查询某账号的所有公排下级
