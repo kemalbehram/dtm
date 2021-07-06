@@ -148,7 +148,7 @@ class Ajax extends AdminController
         ];
         $this->validate($get, $rule, $message);
 
-        $data = Orders::where('address', $get['address'])->select();
+        $data = Orders::where('address', $get['address'])->order('id', 'desc')->select();
         foreach ($data as &$v) {
             $status_name = [0 => '质押中', 1 => '已到期', 2 => '已解押'];
             $v->types_name = $status_name[$v->status];
