@@ -186,7 +186,7 @@ class Orders extends TimeModel
             Users::changeAmount($order->uid, 2, $amount);
 
             //订单状态变更
-            $order->status = 1;
+            $order->status = 2;
             $order->save();
 
             //插入资金日志
