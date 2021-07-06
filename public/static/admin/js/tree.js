@@ -15,11 +15,13 @@ define(["jquery", "easy-admin"], function ($, ea) {
             getData();
 
             function getData() {
+                var index = layer.load(0, {shade: false});
                 $.ajax({
                     url: ea.url(init.index_url),
                     type: 'POST',
                     dataType: 'json',
                     success: function (res) {
+                        layer.close(index);
                         tree.render({
                             elem: '#tree'
                             ,data: res,
