@@ -21,7 +21,9 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'address', title: '钱包地址'},
                     {field: 'amount', title: '质押数量(DTM)'},
                     {field: 'types', title: '质押期限', selectList:{0:'异常', 1:'1天', 7:'7天', 15:'15天', 30:'30天'}},
-                    {field: 'finish', title: '已质押天数', search: false},
+                    {field: 'finish', title: '已质押天数', search: false, templet: function () {
+                            return '<div class="layui-table-cell laytable-cell-1-0-6">'+ d.finish +'天</div>';
+                        }},
                     {field: 'fl_amount', title: '已发放利息', search: false},
                     {field: 'create_time', title: '质押时间', search: 'range'},
                     // {
