@@ -12,19 +12,28 @@ define(["jquery", "easy-admin"], function ($, ea) {
 
         index: function () {
 
-            $.ajax({
-                url: ea.url(init.index_url),
-                type: 'POST',
-                dataType: 'json',
-                success: function (res) {
-                    tree.render({
-                        elem: '#tree'
-                        ,data: res,
-                    });
-                }
-            })
+            getData();
+
+            function getData() {
+                $.ajax({
+                    url: ea.url(init.index_url),
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (res) {
+                        tree.render({
+                            elem: '#tree'
+                            ,data: res,
+                        });
+                    }
+                });
+            }
+
+            $('#refresh').on('click', function () {
+                getData();
+            });
 
             ea.listen();
+
         }
     };
     return Controller;
