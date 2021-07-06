@@ -88,7 +88,12 @@
         let address = getAddress();
         let token = $('#token').val();
 
-        if (status != 0) {
+        if (status == 1) {
+            layer.msg('订单已经到期，无须操作', {icon:2, skin:'white'}, function () {});
+            return;
+        }
+        if (status == 2) {
+            layer.msg('订单已解押，无须操作', {icon:2, skin:'white'}, function () {});
             return;
         }
 
