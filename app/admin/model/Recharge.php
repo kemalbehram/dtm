@@ -3,6 +3,7 @@
 namespace app\admin\model;
 
 use app\common\model\TimeModel;
+use think\Exception;
 
 class Recharge extends TimeModel
 {
@@ -36,21 +37,25 @@ class Recharge extends TimeModel
     //充值排位
     public static function rechargeAddCommonpath(int $uid)
     {
+        try {
+            $config = sysconfig('other');
 
-        $config = sysconfig('other');
+            $user = Users::find($uid);
 
-        $user = Users::find($uid);
+            //如果已经有排位上级 或者 没有直推上级，都不处理
+            if (!empty($user->cid) || empty($user->fid)) return false;
 
-        //如果已经有排位上级 或者 没有直推上级，都不处理
-        if (!empty($user->cid) || empty($user->fid)) return false;
+            //如果累计充值金额不达标
+            if (Recharge::getAllRecharge($uid) < (float)$config['team_recharge']) return false;
 
-        //如果累计充值金额不达标
-        if (Recharge::getAllRecharge($uid) < (float)$config['team_recharge']) return false;
+            //排位到直推上级的下面
+            Commonpath::addCommonpath($uid, $user->fid);
 
-        //排位到直推上级的下面
-        Commonpath::addCommonpath($uid, $user->fid);
+        } catch (Exception $e) {
 
-        return true;
+            throw new Exception($e->getMessage());
+
+        }
 
     }
 

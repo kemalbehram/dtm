@@ -26,7 +26,7 @@ class Task extends AdminController
             //待入库集合
             $arr = [];
             foreach ($result['result'] as $v) {
-                //非收款记录的抛弃
+                //非收款记录，抛弃
                 if ($v['to'] <> $address) continue;
                 $amount = bcdiv($v['value'],1000000000000000000,4);
                 //金额不正常的抛弃
@@ -83,14 +83,15 @@ class Task extends AdminController
                 $v->state = 1;
                 $v->save();
 
-                //充值排位
-                Recharge::rechargeAddCommonpath($user->id);
-
                 Db::commit();
             } catch (\Exception $e) {
                 Db::rollback();
                 continue;
             }
+
+            //充值排位
+            Recharge::rechargeAddCommonpath($user->id);
+
         }
         return 'success';
     }
