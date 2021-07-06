@@ -84,7 +84,7 @@ class Task extends AdminController
                     //充值记录标记为已处理、已入账，更新处理时间
                     $v->status = 1;
                     $v->state = 1;
-                    $->cl_time = time();
+                    $v->cl_time = time();
                     $v->save();
 
                     Db::commit();
