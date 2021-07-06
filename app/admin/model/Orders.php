@@ -105,7 +105,7 @@ class Orders extends TimeModel
         //如果订单不存在
         if (empty($order)) return false;
 
-        //如果订单已完结 或 状态不正确
+        //如果订单已到期 或 状态不正确
         if (($order->finish >= $order->types) || $order->status <> 0) return false;
 
         //计算日平均利息
@@ -126,7 +126,7 @@ class Orders extends TimeModel
             //已返利金额累加
             $order->fl_amount += $average_lx;
 
-            //如果订单刚好完结
+            //如果订单刚好到期
             if ($order->finish >= $order->types) {
 
                 //变更订单状态为已到期
@@ -176,7 +176,7 @@ class Orders extends TimeModel
             if (empty($order)) throw new Exception('订单不存在');
 
             //其他检查
-            if (($order->finish >= $order->types) || $order->status <> 0) throw new Exception('订单已完结或状态不正确');
+            if (($order->finish >= $order->types) || $order->status <> 0) throw new Exception('订单已到期或状态不正确');
 
             //计算最终金额(可能是负数)
             //提前解押：扣10%本金，退回已发利息。
