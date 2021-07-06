@@ -94,7 +94,7 @@ class Ajax extends AdminController
         $get = $this->request->param();
         $rule = [
             'address|钱包地址'     => 'require|alphaNum|length:42',
-            'num|提现数量'         => 'require|number',
+            'num|提现数量'         => 'require|number|gt:0',
             'token|Token'          => 'require',
         ];
         $this->validate($get, $rule);
