@@ -71,7 +71,7 @@ class Commonpath extends TimeModel
                     $last_fid_level = self::where(['uid' => $fid, 'member_uid' => $last_fid])->value('level');
 
                     //查询fid在该层的所有成员
-                    $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->order('id','asc')->column('member_uid');
+                    $fid_level_child = self::where(['uid' => $fid, 'level' => $last_fid_level])->order('id','desc')->column('member_uid');
                     $fid_level_child = array_values($fid_level_child);
 
                     var_dump($fid_level_child);
