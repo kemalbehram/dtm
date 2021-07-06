@@ -24,9 +24,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'finish', title: '已质押天数', search: false, templet: function (d) {
                             return '<div class="layui-table-cell laytable-cell-1-0-6">'+ d.finish +'天</div>';
                         }},
-                    {field: 'fl_amount', title: '已发放利息', search: false, templet: function (d) {
-                            return '<div class="layui-table-cell laytable-cell-1-0-7">'+ d.fl_amount +' DTM</div>';
-                        }},
+                    {field: 'fl_amount', title: '已发放利息(DTM)', search: false},
                     {field: 'create_time', title: '质押时间', search: 'range'},
                     // {
                     //     width: 100,
