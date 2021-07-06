@@ -88,7 +88,7 @@ class Ajax extends AdminController
         return json(['code' => 1, 'msg' => '获取成功', 'data' => $user]);
     }
 
-    //USDT提现
+    //BUSD提现
     public function withdraw()
     {
         $get = $this->request->param();
