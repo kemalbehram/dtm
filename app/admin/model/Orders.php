@@ -185,6 +185,10 @@ class Orders extends TimeModel
             //余额变更
             Users::changeAmount($order->uid, 2, $amount);
 
+            //订单状态变更
+            $order->status = 1;
+            $order->save();
+
             //插入资金日志
             MoneyLog::addLog($order->uid, 1, $order->fl_amount, 17, $order->id);
             MoneyLog::addLog($order->uid, 1, $order->amount * (float)$config['zy_jy'] / 100, 16, $order->id);
