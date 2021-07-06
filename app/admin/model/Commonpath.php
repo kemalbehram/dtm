@@ -38,6 +38,8 @@ class Commonpath extends TimeModel
                 //否则查找上级的末级叶子节点
                 $last_id = self::getLast($fid);
 
+                throw new Exception($last_id);
+
                 //查询末级叶子节点的上级
                 $last_fid = self::getFuid($last_id);
 
