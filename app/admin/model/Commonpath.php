@@ -75,10 +75,8 @@ class Commonpath extends TimeModel
 
                     $last_fid_position = array_search($last_fid, array_values($fid_level_child));
 
-                    var_dump($last_fid_position);exit;
-
                     //如果这个位置存在
-                    if (!empty($last_fid_position)) {
+                    if ($last_fid_position <> false) {
 
                         //如果位置不在该层的末尾
                         if ($last_fid_position < count($fid_level_child)) {
