@@ -27,14 +27,6 @@ class Commonpath extends AdminController
      */
     public function index()
     {
-		$data = $this->model->where('level', 1)->field('uid as pid,member_uid as id')->select();
-		
-		$data = $data->toArray();
-		halt($data);
-		
-		$tree = list2tree($data);
-		halt($tree);
-		
         return $this->fetch();
     }
 }
