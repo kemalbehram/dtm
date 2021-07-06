@@ -107,7 +107,7 @@ ul {margin: 0;list-style: none;padding: 0;}
 .order-list li .value {float: right;}
 .order-list li .title {overflow: hidden;margin-bottom: 0.16rem;}
 .order-list li .title .value {color: #11ddff;}
-.order-list li .subtitle {overflow: hidden;opacity: 0.6;font-size: 0.32rem;}
+.order-list li .subtitle {overflow: hidden;opacity: 0.6;font-size: 0.32rem;margin-bottom: 0.16rem;}
 
 body .white {color: #fff}
 
