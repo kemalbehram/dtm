@@ -179,14 +179,16 @@ class Orders extends TimeModel
             if (($order->finish >= $order->types) || $order->status <> 0) throw new Exception('订单已完结或状态不正确');
 
             //计算最终金额(可能是负数)
-            //提前解押：扣10%本金，退回已派发利息。
+            //提前解押：扣10%本金，退回已发利息。
             $amount = $order->amount - $order->amount * (float)$config['zy_jy'] / 100 - $order->fl_amount;
 
             //余额变更
             Users::changeAmount($order->uid, 2, $amount);
 
             //插入资金日志
-            MoneyLog::addLog($order->uid, $amount > 0 ? 0 : 0, $amount, 10, $order->id);
+            MoneyLog::addLog($order->uid, 1, $order->fl_amount, 17, $order->id);
+            MoneyLog::addLog($order->uid, 1, $order->amount * (float)$config['zy_jy'] / 100, 16, $order->id);
+            MoneyLog::addLog($order->uid, $amount > 0 ? 0 : 1, $amount, 10, $order->id);
 
             Db::commit();
 
