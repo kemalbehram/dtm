@@ -80,6 +80,8 @@ class Commonpath extends TimeModel
                     //如果这个位置存在
                     if ($last_fid_position !== false) {
 
+                        var_dump($last_fid_position.'-'.(count($fid_level_child) - 1));exit;
+
                         //如果位置不在该层的末尾
                         if ($last_fid_position <> count($fid_level_child) - 1) {
 
